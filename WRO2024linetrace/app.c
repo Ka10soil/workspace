@@ -42,6 +42,8 @@ static const motor_port_t   PortMotorArmDown = EV3_PORT_D; //オブジェを落�
 
 
 void stopping();
+void gain_set(int power, float *p_gain, float *d_gain);
+void linetrace_cm_pd_SP(float cm, int power, bool_t stop);
 
 static void button_clicked_handler(intptr_t button) {
     switch(button) {
@@ -57,6 +59,101 @@ void stopping(){
     while(ev3_button_is_pressed(ENTER_BUTTON) == false) {}    
     tslp_tsk(2000*MSEC);
 }
+
+void gain_set(int power, float *p_gain, float *d_gain){
+    *p_gain = 0.3;
+    *d_gain = 10;
+    if(power > 0 && power <= 10){
+        *p_gain = 0.7;   
+        *d_gain = 55;   
+    }
+    if(power > 10 && power <= 20){
+        *p_gain = 0.75;   
+        *d_gain = 55;   
+    }
+    if(power == 24){
+        *p_gain = -0.5;   //power24だけrightのセンサーでライントレース
+        *d_gain = 60;   
+    }
+    if(power > 20 && power <= 30 && power != 24){
+        *p_gain = 0.4;   
+        *d_gain = 80;   
+    }
+    if(power > 30 && power <= 40){
+        *p_gain = 0.25;   
+        *d_gain = 70;   
+    }
+    if(power > 40 && power <= 50){
+        *p_gain = 0.15;   
+        *d_gain = 60;   
+    }
+    if(power > 50 && power <= 60){
+        *p_gain = 0.16;   
+        *d_gain = 70;   
+    }
+    if(power > 60 && power <= 70){
+        *p_gain = 0.15;   
+        *d_gain = 15;   
+    }
+    if(power > 70 && power <= 80){
+        *p_gain = 0.15;
+        *d_gain = 10;
+    }
+}
+
+
+
+void linetrace_cm_pd_SP(float cm, int power, bool_t stop){
+    ev3_motor_reset_counts(EV3_PORT_B);
+    ev3_motor_reset_counts(EV3_PORT_C);
+    int now_angle_lb = 0;
+    int now_angle_rc = 0;
+    int average = 0;
+    int lb_power;
+    int rc_power;
+    int now_reflect_2; 
+    int now_reflect_3; 
+    int last_diff = 0;
+    int diff = 0;
+    float d;
+    int steering;
+    float p_gain;
+    float d_gain;
+    gain_set(power, &p_gain, &d_gain);
+
+    now_reflect_2 = ev3_color_sensor_get_reflect(EV3_PORT_2);
+    now_reflect_3 = ev3_color_sensor_get_reflect(EV3_PORT_3);
+    diff = now_reflect_2 - now_reflect_3;
+    while (true) {
+        
+        now_reflect_2 = ev3_color_sensor_get_reflect(EV3_PORT_2);
+        now_reflect_3 = ev3_color_sensor_get_reflect(EV3_PORT_3);
+        now_angle_lb = abs(ev3_motor_get_counts(EV3_PORT_B));
+        now_angle_rc = abs(ev3_motor_get_counts(EV3_PORT_C));
+        average = (now_angle_lb + now_angle_rc) / 2;
+        last_diff = diff;
+        diff = now_reflect_2 - now_reflect_3;
+        d = (diff - last_diff);
+        steering = diff * p_gain + d * d_gain;
+        if(steering > 0) {
+            lb_power = power;
+            rc_power = power - (power * steering / 50);
+            lb_power = -lb_power;
+        }
+        else {
+            lb_power = power + (power * steering / 50);
+            rc_power = power;
+            lb_power = -lb_power;
+        }
+        ev3_motor_set_power(EV3_PORT_B, lb_power);
+        ev3_motor_set_power(EV3_PORT_C, rc_power);
+
+        if (average >= ROBOT1CM*cm) break;
+    }
+    ev3_motor_stop(EV3_PORT_B, stop);
+    ev3_motor_stop(EV3_PORT_C, stop);
+}
+
 
 void main_task(intptr_t unused) {
 
@@ -81,5 +178,11 @@ void main_task(intptr_t unused) {
     
 
     /* ここからコーディング */
+    stopping();
+    linetrace_cm_pd_SP(100,70,true);
+    stopping();
+    linetrace_cm_pd_SP(100,70,true);
+    stopping();
+
 
 }
