@@ -139,6 +139,7 @@ void gain_set_pid(int power, float *p_gain, float *d_gain, float *i_gain){
 
 
 void linetrace_cm_pd_SP(float cm, int power, bool_t stop){
+    power = -power;
     ev3_motor_reset_counts(EV3_PORT_B);
     ev3_motor_reset_counts(EV3_PORT_C);
     int now_angle_lb = 0;
@@ -446,7 +447,6 @@ void straight_dr(float cm, int power, bool_t stop){
 }
 
 void turn(int angle, int lb_power, int rc_power) {
-
     ev3_motor_reset_counts(EV3_PORT_B);
     ev3_motor_reset_counts(EV3_PORT_C);
     int lb_sign = lb_power / abs(lb_power);
@@ -502,6 +502,7 @@ void turn(int angle, int lb_power, int rc_power) {
 }
 
 void straight(float cm, int power){
+    power = -power;
     ev3_motor_reset_counts(EV3_PORT_B);
     ev3_motor_reset_counts(EV3_PORT_C);
     //if (power == 30) power = 40;
@@ -597,8 +598,12 @@ void main_task(intptr_t unused) {
     /* ここからコーディング */
     stopping();
     straight(30, 30);
+    stopping();
     turn(90, 30, -30);
+    stopping();
     linetrace_cm_pd_SP(40, 30, true);
+    stopping();
+
 
 
 

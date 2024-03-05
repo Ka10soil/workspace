@@ -352,11 +352,6 @@ void main_task(intptr_t unused) {
 
     /* ここからコーディング */
     stopping();
-    while (true)
-    {
-        linetrace_rgb(100,20,true);
-        stopping();
-    }
     
     
 
