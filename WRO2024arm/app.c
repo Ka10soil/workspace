@@ -83,7 +83,7 @@ void arm_D(armmode_new_t mode) {
     now_arm_angle = ev3_motor_get_counts(EV3_PORT_D);
     switch (mode) {
         case DOWN:
-            ev3_motor_set_power(EV3_PORT_D, 40);
+            ev3_motor_set_power(EV3_PORT_D, 20);
             break;
         case UP:
             ev3_motor_set_power(EV3_PORT_D, -40);
@@ -121,7 +121,7 @@ void main_task(intptr_t unused) {
     arm_D(UP);
     tslp_tsk(800*MSEC);
     arm_D(DOWN);
-    tslp_tsk(800*MSEC);
+    tslp_tsk(1000*MSEC);
     arm_A(CLOSE);
     tslp_tsk(800*MSEC);
 }

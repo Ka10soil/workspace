@@ -604,13 +604,13 @@ void straight(float cm, int power){
         if(steer > 0) {
             lb_power = changing_power;
             rc_power = changing_power - (changing_power * steer / 50);
-            rc_power = sign*rc_power;
+            rc_power = -sign*rc_power;
             lb_power = -sign*lb_power;
         }
         else {
             lb_power = changing_power + (changing_power * steer / 50);
             rc_power = changing_power;
-            rc_power = sign*rc_power;
+            rc_power = -sign*rc_power;
             lb_power = -sign*lb_power;
         }
         ev3_motor_set_power(EV3_PORT_B, lb_power);
@@ -678,8 +678,7 @@ void main_task(intptr_t unused) {
     stopping();
     while (true)
     {
-        straight(50, 30);
-        straight(50, -30);
+        ev3_motor_rotate(EV3_PORT_A, 100, 20, true);
         stopping();
     }
 
