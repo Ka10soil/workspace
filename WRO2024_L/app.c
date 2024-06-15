@@ -678,7 +678,22 @@ void main_task(intptr_t unused) {
     stopping();
     while (true)
     {
-        ev3_motor_rotate(EV3_PORT_A, 100, 20, true);
+        turn(180, 30, -30);
+        stopping();
+        turn(180, 30, -30);
+        stopping();
+        turn(180, 30, -30);
+        stopping();
+        turn(180, 30, -30);
+        stopping();
+
+        turn(180, -30, 30);
+        stopping();
+        turn(180, -30, 30);
+        stopping();
+        turn(180, -30, 30);
+        stopping();
+        turn(180, -30, 30);
         stopping();
     }
 

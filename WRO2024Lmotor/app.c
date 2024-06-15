@@ -524,7 +524,7 @@ void turn(int angle, int lb_power, int rc_power) {
     int average = 0;
     int maximum = 80;
     int points = 40;
-    float turn_num = 0.104;
+    float turn_num = 0.11;
     if (abs(lb_power) == 0 || abs(rc_power) == 0) {
         turn_num = 0.104;
     }
@@ -667,10 +667,9 @@ void main_task(intptr_t unused) {
     stopping();
     while (true)
     {
-        straight(40, 30);
-        tslp_tsk(1000*MSEC);
-        straight(40, -30);
-
+        straight(45,30);
+        stopping();
+        straight(45,-30);
         stopping();
     }
 
