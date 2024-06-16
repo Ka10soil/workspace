@@ -140,10 +140,10 @@ void arm_A(armmode_new_t mode){
     now_arm_angle_A = ev3_motor_get_counts(EV3_PORT_A);
     switch (mode) {
         case OPEN:
-            ev3_motor_set_power(EV3_PORT_A, 25);
+            ev3_motor_set_power(EV3_PORT_A, 40);
             break;
         case CLOSE:
-            ev3_motor_set_power(EV3_PORT_A, -40);
+            ev3_motor_set_power(EV3_PORT_A, -50);
             break;
         case SET:
             if(now_arm_angle_A >= -330)ev3_motor_set_power(EV3_PORT_A, -20);
@@ -313,19 +313,19 @@ void gain_set(int power, float *p_gain, float *d_gain){
     *p_gain = 0.3;
     *d_gain = 10;
     if(power > 0 && power <= 10){
-        *p_gain = 0.7;   
-        *d_gain = 55;   
+        *p_gain = 0.9;   
+        *d_gain = 80;   
     }
     if(power > 10 && power <= 20){
-        *p_gain = 0.75;   
-        *d_gain = 55;   
+        *p_gain = 0.7;   
+        *d_gain = 80;   
     }
     if(power == 24){
         *p_gain = -0.5;   //power24だけrightのセンサーでライントレース
         *d_gain = 60;   
     }
     if(power > 20 && power <= 30 && power != 24){
-        *p_gain = 0.4;   
+        *p_gain = 0.6;   
         *d_gain = 80;   
     }
     if(power > 30 && power <= 40){
@@ -754,7 +754,7 @@ void main_task(intptr_t unused) {
 
     /* ここからコーディング */
 
-    stopping();
+    /*stopping();
     arm_D(UP);
     arm_A(OPEN);
     tslp_tsk(800*MSEC);
@@ -762,12 +762,12 @@ void main_task(intptr_t unused) {
     ev3_motor_reset_counts(EV3_PORT_D);
     
     turn(94, 20, 0);
-    turn(96, 0, 20);
+    turn(98, 0, 20);
     arm_D(DOWN);
     tslp_tsk(800*MSEC);
     ev3_motor_stop(EV3_PORT_D,true);
     tslp_tsk(500*MSEC);
-    straight(8.5, 20);
+    straight(8, 20);
     arm_A(CLOSE);                       //1
     tslp_tsk(1400*MSEC);
     arm_A(OPEN);
@@ -781,7 +781,7 @@ void main_task(intptr_t unused) {
     arm_D(UP);
     tslp_tsk(800*MSEC);
     ev3_motor_stop(EV3_PORT_D,true);
-    straight(5.5, -20);
+    straight(5, -20);
     arm_D(SETNEW);
     tslp_tsk(600*MSEC);
     arm_A(OPEN);
@@ -793,7 +793,98 @@ void main_task(intptr_t unused) {
     arm_A(CLOSE);                       //3
     tslp_tsk(1400*MSEC);
 
+
+
+    straight(10, -30);
+    turn(90, -30, 30);
+    straight_on(-30);
+    straight_off(7, true);
+    straight(19.5, 30);
+    turn(90, 30, -30);
+    linetrace_cm_pd_SP(5, 20, false);
+    linetrace_color_pd_SP(LEFT, COLOR_BLACK, 20, false);
+    linetrace_cm_pd_SP(15, 20, true);
+    turn(90, 30, -30);
+    arm_D(UP);
+    tslp_tsk(800*MSEC);
+    ev3_motor_stop(EV3_PORT_D,true);
+    straight(11, 20);
+    arm_D(SETNEW);
+    tslp_tsk(600*MSEC);
+    ev3_motor_stop(EV3_PORT_D,true);
+    arm_A(OPEN);
+    tslp_tsk(200*MSEC);
+    arm_D(DOWN);
+    ev3_motor_stop(EV3_PORT_A,true);
+    tslp_tsk(600*MSEC);
+    ev3_motor_stop(EV3_PORT_D,true);
+    arm_A(CLOSE);
+    tslp_tsk(800*MSEC);
+    ev3_motor_stop(EV3_PORT_D, true);
+    ev3_motor_rotate(EV3_PORT_D, 25, -30, true);
+    straight(11, -30);
+    turn(90, -30, 30);
+    linetrace_cm_pd_SP(10, 30, false);
+    linetrace_color_pd_SP(BOTH, COLOR_BLACK, 30, true);
+    turn(180, -30, 0);
+    straight_on(20);
+    //白線見てから黒線で止まるストレート
+    colorid_t color_3 = 0;
+    int now_reflect_3;
+    while (true){
+        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
+        if(color_3 == COLOR_WHITE) break;
+    }
+    while (true){
+        now_reflect_3 = ev3_color_sensor_get_reflect(EV3_PORT_3);
+        if(now_reflect_3 <= 10) break;
+    }
+    ev3_motor_stop(EV3_PORT_B, true);
+    ev3_motor_stop(EV3_PORT_C, true);
+    straight(23, 30);
+    turn(90, 30, -30);
+    straight(3, -20);
+    arm_D(UP);
+    tslp_tsk(800*MSEC);
+    ev3_motor_stop(EV3_PORT_D,true);*/
+
     stopping();
+
+    arm_D(UP);
+    arm_A(OPEN);
+    tslp_tsk(800*MSEC);
+    ev3_motor_reset_counts(EV3_PORT_A);
+    ev3_motor_reset_counts(EV3_PORT_D);
+
+    straight(17.5, -30);
+    arm_D(DOWN);
+    tslp_tsk(800*MSEC);
+    ev3_motor_stop(EV3_PORT_D,true);
+    turn(90, 30, -30);
+    straight(10, -30);
+    arm_A(OPEN);
+    tslp_tsk(800*MSEC);
+    arm_D(UP);
+    tslp_tsk(800*MSEC);
+    ev3_motor_stop(EV3_PORT_D,true);
+    straight(17.5, -30);
+    arm_D(DOWN);
+    tslp_tsk(400*MSEC);
+    turn(90, -30, 30);
+    linetrace_cm_pd_SP(3, 20, true);
+    linetrace_color_pd_SP(BOTH, COLOR_RED, 20, true);
+    straight(1.5, 20);
+    turn(90, -30, 30);
+    straight(12, 30);
+    arm_D(DOWN);
+    tslp_tsk(800*MSEC);
+    ev3_motor_stop(EV3_PORT_D,true);
+    arm_A(CLOSE);
+    straight(12, -30);
+    turn(90, -30, 30);
+    linetrace_cm_pd_SP(10, 30, true);
+    turn(90, 30, -30);
+    //二つ目のオブジェを置くプログラム
 
 
 
