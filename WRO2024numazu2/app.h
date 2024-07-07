@@ -94,6 +94,7 @@ typedef enum armmode_new {
     SETOPEN,
     SETCLOSE,
     SET,
+    GETDEBRIS,
     GET_OBJ_2
 } armmode_new_t ;
 
@@ -117,6 +118,7 @@ typedef enum armmode_new {
 
 extern void	task(intptr_t exinf);
 extern void	main_task(intptr_t exinf);
+extern void	arm_task(intptr_t exinf);
 extern void balance_task(intptr_t exinf);
 extern void idle_task(intptr_t exinf);
 //extern void	tex_routine(TEXPTN texptn, intptr_t exinf);

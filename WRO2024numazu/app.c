@@ -350,6 +350,47 @@ void gain_set(int power, float *p_gain, float *d_gain){
     }
 }
 
+void gain_set_rgb(int power, float *p_gain, float *d_gain){
+    *p_gain = 0.3;
+    *d_gain = 10;
+    if(power > 0 && power <= 10){
+        *p_gain = 0.2;   
+        *d_gain = 80;   
+    }
+    if(power > 10 && power <= 20){
+        *p_gain = 0.2;   
+        *d_gain = 80;   
+    }
+    if(power == 24){
+        *p_gain = -0.5;   //power24だけrightのセンサーでライントレース
+        *d_gain = 60;   
+    }
+    if(power > 20 && power <= 30 && power != 24){
+        *p_gain = 0.2;   
+        *d_gain = 80;   
+    }
+    if(power > 30 && power <= 40){
+        *p_gain = 0.22;   
+        *d_gain = 70;   
+    }
+    if(power > 40 && power <= 50){
+        *p_gain = 0.15;   
+        *d_gain = 60;   
+    }
+    if(power > 50 && power <= 60){
+        *p_gain = 0.16;   
+        *d_gain = 70;   
+    }
+    if(power > 60 && power <= 70){
+        *p_gain = 0.15;   
+        *d_gain = 15;   
+    }
+    if(power > 70 && power <= 80){
+        *p_gain = 0.15;
+        *d_gain = 10;
+    }
+}
+
 void gain_set_pro(int power, float *p_gain, float *d_gain){
     *p_gain = 0.3;
     *d_gain = 10;
