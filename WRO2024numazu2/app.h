@@ -94,6 +94,8 @@ typedef enum armmode_new {
     SETOPEN,
     SETCLOSE,
     SET,
+    ON_CLOSE,
+    ON_OPEN,
     GETDEBRIS,
     GET_OBJ_2
 } armmode_new_t ;
