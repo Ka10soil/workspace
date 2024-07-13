@@ -1172,8 +1172,9 @@ void main_task(intptr_t unused) {
     
 
     /* ここからコーディング */
-
-
+    ev3_motor_set_power(EV3_PORT_A, -30);
+    tslp_tsk(2000*MSEC);
+    ev3_motor_rotate(EV3_PORT_A, 100, 20, true);
 
     stopping();
 
@@ -1191,25 +1192,17 @@ void main_task(intptr_t unused) {
     ev3_motor_stop(EV3_PORT_A,true);
     ev3_motor_stop(EV3_PORT_D, true);
 
+    
+
+
+    stopping();
 
 
 
-    linetrace_cm_rgb_pd_SP(6, 15, false);
-    linetrace_rgb_pd_SP(LEFT, COLOR_BLACK, 15, false);
-    linetrace_cm_rgb_pd_SP(9, 15, true);
-    tslp_tsk(200*MSEC);
-    turn(90, 30, -30);
-    arm_A(SET);
-    arm_D(DOWN);
-    straight(7, 20);
-    arm_A(CLOSE);
-    tslp_tsk(500*MSEC);
-    speed_arm(EV3_PORT_D, UP, 25);
 
-    straight(7, -20);
-    arm_D(UP);
-    turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(10.5, 15, true);
+
+
+    linetrace_cm_rgb_pd_SP(10, 15, true);
     tslp_tsk(200*MSEC);
 
     turn(90, -30, 30);
@@ -1224,6 +1217,7 @@ void main_task(intptr_t unused) {
     ev3_motor_stop(EV3_PORT_B,true);
     ev3_motor_stop(EV3_PORT_C, true);
     arm_A(SET);
+    tslp_tsk(2000*MSEC);
     tslp_tsk(500*MSEC);
 
  //赤のオブジェクトを二つ入手。
@@ -1258,7 +1252,7 @@ void main_task(intptr_t unused) {
     linetrace_cm_rgb_pd_SP(6, 15, false);
     linetrace_color_pd_SP(LEFT, COLOR_BLACK, 20, false);
     linetrace_cm_rgb_pd_SP(22, 30, false);
-    linetrace_cm_rgb_pd_SP(7, 15, true);
+    linetrace_cm_rgb_pd_SP(7.5, 15, true);
     tslp_tsk(200*MSEC);
     turn(90, 30, -30);
 
@@ -1280,12 +1274,8 @@ void main_task(intptr_t unused) {
     arm_D(SETNEW);
     arm_A(SET);
     arm_D(DOWN);
-    straight_on(10);
-    arm_A(CLOSE);//armのところね
-    tslp_tsk(600*MSEC);
-    ev3_motor_stop(EV3_PORT_B,true);
-    ev3_motor_stop(EV3_PORT_C, true);
-    arm_A(SET);
+    straight(2, 15);
+    arm_A(CLOSE);
     tslp_tsk(500*MSEC);
 
 
@@ -1341,12 +1331,8 @@ void main_task(intptr_t unused) {
     arm_D(SETNEW);
     arm_A(SET);
     arm_D(DOWN);
-    straight_on(10);
-    arm_A(CLOSE);//armのところね
-    tslp_tsk(600*MSEC);
-    ev3_motor_stop(EV3_PORT_B,true);
-    ev3_motor_stop(EV3_PORT_C, true);
-    arm_A(SET);
+    straight(2, 10);
+    arm_A(CLOSE);
     tslp_tsk(500*MSEC);
 
 
@@ -1368,6 +1354,8 @@ void main_task(intptr_t unused) {
     tslp_tsk(200*MSEC);
 
     straight(9, 10);
+    ev3_motor_stop(EV3_PORT_B, true);
+    ev3_motor_stop(EV3_PORT_C, true);
     arm_A(CLOSE);
     tslp_tsk(600*MSEC);
     arm_A(SET);
@@ -1411,12 +1399,8 @@ void main_task(intptr_t unused) {
     arm_D(SETNEW);
     arm_A(SET);
     arm_D(DOWN);
-    straight_on(10);
-    arm_A(CLOSE);//armのところね
-    tslp_tsk(600*MSEC);
-    ev3_motor_stop(EV3_PORT_B,true);
-    ev3_motor_stop(EV3_PORT_C, true);
-    arm_A(SET);
+    straight(2, 10);
+    arm_A(CLOSE);
     tslp_tsk(500*MSEC);
 
 
@@ -1453,14 +1437,6 @@ void main_task(intptr_t unused) {
     arm_A(SET);
 
     straight(15, -30);
-
-
-
-
-    stopping();
-
-
-
 
 
 
