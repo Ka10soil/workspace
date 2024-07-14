@@ -87,7 +87,6 @@ static void button_clicked_handler(intptr_t button) {
     
 void stopping(){
     while(ev3_button_is_pressed(ENTER_BUTTON) == false) {}    
-    tslp_tsk(2000*MSEC);
 }
 
 void turn(int angle, int lb_power, int rc_power){
@@ -105,10 +104,16 @@ void turn(int angle, int lb_power, int rc_power){
     int now_left_angle = 0;
     int average = 0;
     int maximum = 80;
-    int points = 40;
-    float turn_num = 0.156;
+    int points = 50;
+    float turn_num = 0.1525;
     if (abs(lb_power) == 0 || abs(rc_power) == 0) {
         turn_num = 0.152;
+    }
+    if (lb_power > 0 && rc_power < 0) {
+        turn_num = 0.153;
+    }
+    if (lb_power < 0 && rc_power > 0) {
+        turn_num = 0.153;
     }
     if (abs(lb_power) >= abs(rc_power)) maximum = abs(lb_power);
     if (abs(rc_power) > abs(lb_power)) maximum = abs(rc_power);
@@ -138,8 +143,9 @@ void turn(int angle, int lb_power, int rc_power){
         }
         if (lb_power != 0 && rc_power != 0){
             if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > average) changing_power = changing_power + 0.003;
-            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.14;
+            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.02;
             if (changing_power <= 15) changing_power = 15;
+            if (changing_power >= maximum) changing_power = maximum;
             if (goal_angle <= average) break; 
             rc_power = changing_power*rc_sign;
             lb_power = -changing_power*lb_sign;
@@ -149,7 +155,6 @@ void turn(int angle, int lb_power, int rc_power){
     }
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    stopping();
 }
 
 void arm_A(armmode_new_t mode){
@@ -187,7 +192,7 @@ void arm_A(armmode_new_t mode){
         if(mode == OPEN) break;
     }
     if(mode == SET)ev3_motor_stop(EV3_PORT_A, true);
-    if(mode == GET_OBJ_2)ev3_motor_stop(EV3_PORT_A, true);
+    if(mode == GET_OBJ_2) ev3_motor_stop(EV3_PORT_A, true);
     if(mode == GETDEBRIS)ev3_motor_stop(EV3_PORT_A, true);
     now_arm_angle_A = ev3_motor_get_counts(EV3_PORT_A);
 }
@@ -209,7 +214,7 @@ void arm_D(armmode_new_t mode) {
             else ev3_motor_set_power(EV3_PORT_D, -40);
             break;
         case SETNEW:
-            if(now_arm_angle <= -660)ev3_motor_set_power(EV3_PORT_D, 40);
+            if(now_arm_angle <= -665)ev3_motor_set_power(EV3_PORT_D, 40);
             else ev3_motor_set_power(EV3_PORT_D, -30);
             break;
         case SETNEW_2:
@@ -223,7 +228,7 @@ void arm_D(armmode_new_t mode) {
     //sta_cyc(ARM_CYC);
     while (true) {
         now_arm_angle = ev3_motor_get_counts(EV3_PORT_D);
-        if(now_arm_angle <= -659 && now_arm_angle >= -661 && mode == SETNEW) break;
+        if(now_arm_angle <= -664 && now_arm_angle >= -666 && mode == SETNEW) break;
         if(now_arm_angle <= -519 && now_arm_angle >= -521 && mode == SETNEW_2) break;
         if(now_arm_angle <= -339 && now_arm_angle >= -341 && mode == UP) break;
         if(now_arm_angle <= -789 && now_arm_angle >= -791 && mode == DOWN) break;
@@ -416,11 +421,11 @@ void gain_set_rgb(int power, float *p_gain, float *d_gain){
         *d_gain = 60;   
     }
     if(power > 20 && power <= 30 && power != 24){
-        *p_gain = 0.09;   
+        *p_gain = 0.07;   
         *d_gain = 80;   
     }
     if(power > 30 && power <= 40){
-        *p_gain = 0.07;   
+        *p_gain = 0.04;   
         *d_gain = 90;   
     }
     if(power > 40 && power <= 50){
@@ -1195,16 +1200,42 @@ void main_task(intptr_t unused) {
     ev3_motor_stop(EV3_PORT_D, true);
 
 
+    /*while (true)
+    {
+        stopping();
+        arm_A(CLOSE);
+        tslp_tsk(500*MSEC);
+        arm_D(UP);
+        stopping();
+
+        straight(11, 10);
+        straight(4, -20);
+        arm_D(SETNEW);
+        stopping();
+        arm_A(GET_OBJ_2);
+        arm_D(DOWN);
+        straight_on(10);
+        arm_A(CLOSE);//armのところね
+        tslp_tsk(300*MSEC);
+        ev3_motor_stop(EV3_PORT_B,true);
+        ev3_motor_stop(EV3_PORT_C, true);
+        arm_D(UP);
+        stopping();
+        arm_D(DOWN);
+        arm_A(SET);
+
+    }*/
+
 
     int start = 1;
+    if(start == 1) start_1();
     if(start == 2) start_2();
-    start_1();
 
 
-    
+
     linetrace_cm_rgb_pd_SP(6, 15, false);
     linetrace_rgb_pd_SP(LEFT, COLOR_BLACK, 15, false);
-    linetrace_cm_rgb_pd_SP(9.7, 15, true);
+    linetrace_cm_rgb_pd_SP(9, 15, true);
     tslp_tsk(200*MSEC);
     turn(90, 30, -30);
     arm_A(SET);
@@ -1341,7 +1372,8 @@ void main_task(intptr_t unused) {
 
     turn(90, -30, 30);
     linetrace_cm_rgb_pd_SP(8, 15, false);
-    linetrace_rgb_pd_SP(BOTH,COLOR_RED,30, true);
+    linetrace_cm_rgb_pd_SP(20, 25, false);
+    linetrace_rgb_pd_SP(BOTH,COLOR_RED,15, true);
     tslp_tsk(100*MSEC);
     straight(7, -20);
     tslp_tsk(100*MSEC);
@@ -1367,7 +1399,7 @@ void main_task(intptr_t unused) {
 
     arm_D(DOWN);
     arm_A(SET);
-    straight(7, 20);
+    straight(6.5, 20);
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
 
