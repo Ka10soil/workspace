@@ -1026,17 +1026,16 @@ void straight(float cm, int power){
 }
 
 void start_1(){
-    
+   
     //pattern1
-    straight_on(-30);
-    tslp_tsk(1000*MSEC);
-    straight(34, 30);
-    straight_on(20);
     arm_A(CLOSE);
-    straight_off(2, false);
     arm_A(GETDEBRIS);
     arm_D(UP);
-    straight_off(4, true);
+    straight_on(-30);
+    tslp_tsk(800*MSEC);
+    straight(32, 50);
+    straight_on(20);
+    straight_off(2, false);
     arm_D(DOWN);
     straight_on(20);
     //白線見てから黒線で止まるストレート
@@ -1057,32 +1056,28 @@ void start_1(){
     tslp_tsk(500*MSEC);
     straight(6, -30);
     turn(20, 30, -30);
-    straight_on(-30);
-    tslp_tsk(3000*MSEC);
-    straight(20, 30);
-    turn(110, -30, 30);
-    straight(40, 30);
-    arm_A(GETDEBRIS);
-    arm_D(UP);
-    straight(40, -30);
-    turn(110, 30, -30);
-    straight_on(-30);
-    tslp_tsk(700*MSEC);
+    straight_on(-40);
+    tslp_tsk(2000*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
+    tslp_tsk(200*MSEC);
 
-    straight(19.5, 30);
-    turn(90, 30, -30);
+
+    straight(19, 30);
+    turn(110, -30, 30);
+    straight(40, 50);
+    arm_A(GETDEBRIS);
+    arm_D(UP);
+    straight(40, -50);
+    turn(160, -30, 30);
+
 
     straight(12, 30);
-    
+   
 
-
-    
-
-    
 
 }
+
 
 void start_2() {
     straight_on(-30);
@@ -1233,17 +1228,20 @@ void main_task(intptr_t unused) {
 
 
 
-    linetrace_cm_rgb_pd_SP(6, 15, false);
+linetrace_cm_rgb_pd_SP(6, 15, false);
     linetrace_rgb_pd_SP(LEFT, COLOR_BLACK, 15, false);
     linetrace_cm_rgb_pd_SP(9, 15, true);
     tslp_tsk(200*MSEC);
     turn(90, 30, -30);
     arm_A(SET);
+    straight(4.5, 20);
     arm_D(DOWN);
-    straight(7, 20);
+    straight(2.5, 20);
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
     speed_arm(EV3_PORT_D, UP, 25);
+
+
 
 
     straight(7, -20);
@@ -1251,6 +1249,8 @@ void main_task(intptr_t unused) {
     turn(90, 30, -30);
     linetrace_cm_rgb_pd_SP(10, 15, true);
     tslp_tsk(200*MSEC);
+
+
 
 
     /*turn(90, -30, 30);
@@ -1272,16 +1272,16 @@ void main_task(intptr_t unused) {
     arm_D(DOWN);
     straight_on(10);
     arm_A(CLOSE);//armのところね
-    tslp_tsk(300*MSEC);
-    ev3_motor_stop(EV3_PORT_B,true);
-    ev3_motor_stop(EV3_PORT_C, true);
+    straight_off(2, true);
 
 
- //赤のオブジェクトを二つ入手。
+    //赤のオブジェクトを二つ入手。
+
+
 
 
     speed_arm(EV3_PORT_D, UP, 10);
-    straight(8.5, -20);
+    straight(9, -20);
     arm_D(UP);
     turn(90, 30, -30);
     linetrace_rgb_pd_SP(BOTH, COLOR_RED, 25, false);
@@ -1315,11 +1315,17 @@ void main_task(intptr_t unused) {
     turn(90, 30, -30);
 
 
-    arm_D(DOWN);
+
+
+   
     arm_A(SET);
-    straight(7, 20);
+    straight(4.5, 20);
+    arm_D(DOWN);
+    straight(2.5, 20);
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
+
+
 
 
     straight(7, -20);
@@ -1327,6 +1333,8 @@ void main_task(intptr_t unused) {
     turn(90, 30, -30);
     linetrace_cm_rgb_pd_SP(10, 20, true);
     tslp_tsk(200*MSEC);
+
+
 
 
     /*turn(90, -30, 30);
@@ -1348,13 +1356,13 @@ void main_task(intptr_t unused) {
     arm_D(DOWN);
     straight_on(10);
     arm_A(CLOSE);//armのところね
-    tslp_tsk(300*MSEC);
-    ev3_motor_stop(EV3_PORT_B,true);
-    ev3_motor_stop(EV3_PORT_C, true);
+    straight_off(2, true);
+
+
 
 
     arm_D(UP);
-    straight(8.5, -20);
+    straight(9, -20);
     turn(90, 30, -30);
     linetrace_cm_rgb_pd_SP(12, 15, true);
     turn(90, 30, -30);
@@ -1370,14 +1378,20 @@ void main_task(intptr_t unused) {
     arm_D(UP);
 
 
+
+
     turn(90, -30, 30);
     linetrace_cm_rgb_pd_SP(8, 15, false);
     linetrace_cm_rgb_pd_SP(20, 25, false);
     linetrace_rgb_pd_SP(BOTH,COLOR_RED,15, true);
     tslp_tsk(100*MSEC);
-    straight(7, -20);
+    straight(6.5, -20);
     tslp_tsk(100*MSEC);
     turn(90, -30, 30);
+
+
+
+
 
 
 
@@ -1393,15 +1407,16 @@ void main_task(intptr_t unused) {
 
 
 
-
-
-
-
-    arm_D(DOWN);
     arm_A(SET);
-    straight(6.5, 20);
+    straight(4.5, 20);
+    arm_D(DOWN);
+    straight(2.5, 20);
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
+
+
+
+
 
 
 
@@ -1411,6 +1426,8 @@ void main_task(intptr_t unused) {
     turn(90, -30, 30);
     linetrace_cm_rgb_pd_SP(10, 15, true);
     tslp_tsk(200*MSEC);
+
+
 
 
     /*turn(90, 30, -30);
@@ -1432,18 +1449,16 @@ void main_task(intptr_t unused) {
     arm_D(DOWN);
     straight_on(10);
     arm_A(CLOSE);//armのところね
-    tslp_tsk(300*MSEC);
-    ev3_motor_stop(EV3_PORT_B,true);
-    ev3_motor_stop(EV3_PORT_C, true);
+    straight_off(2, true);
 
 
 
 
     arm_D(UP);
-    straight(8.5, -20);
+    straight(9, -20);
     turn(90, -30, 30);
     linetrace_cm_rgb_pd_SP(10, 15, false);
-    linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 50, true);
+    linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 30, true);
     tslp_tsk(100*MSEC);
     turn(180, 30, -30);
     linetrace_cm_rgb_pd_SP(8, 15, false);
@@ -1453,26 +1468,32 @@ void main_task(intptr_t unused) {
     turn(90, 30, -30);
 
 
+
+
     arm_D(DOWN);
     arm_A(SET);
     tslp_tsk(200*MSEC);
+
+
 
 
     straight(9, 10);
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
     arm_A(SET);
-    straight(2, -10);
+    straight(3, -10);
     speed_arm(EV3_PORT_A, CLOSE, 15);
     tslp_tsk(600*MSEC);
-    straight(8, -10);
+    straight(6, -10);
     arm_A(SET);
-    straight(5, 10);
+    straight(4, 10);
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
     arm_D(UP);
     straight(10.5, 30);
     arm_D(SETNEW_2);
+
+
 
 
     arm_A(SET);
@@ -1482,15 +1503,25 @@ void main_task(intptr_t unused) {
     linetrace_cm_rgb_pd_SP(6, 10, false);
     linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, false);
     linetrace_cm_rgb_pd_SP(6.5, 15, true);
+    tslp_tsk(200*MSEC);
     turn(90, -30, 30);
 
 
 
 
+
+
+
+
+    straight(4.5, 20);
     arm_D(DOWN);
-    straight(7, 20);
+    straight(2.5, 20);
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
+
+
+
+
 
 
 
@@ -1500,6 +1531,8 @@ void main_task(intptr_t unused) {
     turn(90, 30, -30);
     linetrace_cm_rgb_pd_SP(9.5, 15, true);
     tslp_tsk(200*MSEC);
+
+
 
 
     /*turn(90, -30, 30);
@@ -1521,18 +1554,22 @@ void main_task(intptr_t unused) {
     arm_D(DOWN);
     straight_on(10);
     arm_A(CLOSE);//armのところね
-    tslp_tsk(300*MSEC);
-    ev3_motor_stop(EV3_PORT_B,true);
-    ev3_motor_stop(EV3_PORT_C, true);
+    straight_off(2, true);
+
+
 
 
     arm_D(UP);
-
-
-    straight(8.5, -20);
+    straight(9, -20);
     turn(90, -30, 30);
     linetrace_cm_rgb_pd_SP(8, 15, true);
     turn(90, -30, 30);
+
+
+
+
+
+
 
 
 
@@ -1549,14 +1586,14 @@ void main_task(intptr_t unused) {
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
     arm_A(SET);
-    straight(2, -10);
+    straight(3, -10);
     speed_arm(EV3_PORT_A, CLOSE, 15);
     tslp_tsk(600*MSEC);
-    straight(8, -10);
+    straight(6, -10);
     arm_A(SET);
-    straight(5, 10);
+    straight(4, 10);
     arm_A(CLOSE);
-    tslp_tsk(500*MSEC);
+    tslp_tsk(300*MSEC);
     arm_D(UP);
     straight(10.5, 30);
     arm_D(SETNEW_2);
@@ -1600,6 +1637,7 @@ void main_task(intptr_t unused) {
     ev3_motor_stop(EV3_PORT_C, true);
     straight(7, 30);
     turn(90, 30, -30);
+    linetrace_cm_rgb_pd_SP(10, 20, false);
     linetrace_rgb_pd_SP(BOTH, COLOR_RED, 30, true);
     straight(40, 30);
     turn(40, -30, 30);
@@ -1614,8 +1652,6 @@ void main_task(intptr_t unused) {
     turn(90, -30, 30);
     straight(30, 30);
     arm_D(UP);
-
-
 
 
 
