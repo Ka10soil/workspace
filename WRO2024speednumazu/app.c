@@ -96,10 +96,10 @@ void stopping(){
 
 void turn(int angle, int lb_power, int rc_power){
     if(angle > 100) tslp_tsk(200*MSEC);
-    if (lb_power == 30) lb_power = lb_power + 40;
-    if (lb_power == -30) lb_power = lb_power - 40;
-    if (rc_power == 30) rc_power = rc_power + 40;
-    if (rc_power == -30) rc_power = rc_power - 40;
+    if (lb_power == 30) lb_power = lb_power + 35;
+    if (lb_power == -30) lb_power = lb_power - 35;
+    if (rc_power == 30) rc_power = rc_power + 35;
+    if (rc_power == -30) rc_power = rc_power - 35;
 
     ev3_motor_reset_counts(EV3_PORT_B);
     ev3_motor_reset_counts(EV3_PORT_C);
@@ -1069,7 +1069,7 @@ void start_1(){
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
 
-    straight(20, 40);
+    straight(20, 50);
     turn(110, -30, 30);
     straight(38, 60);
     arm_A(GETDEBRIS);
@@ -1087,38 +1087,45 @@ void start_1(){
 
 
 void start_2() {
-    straight_on(-30);
-    tslp_tsk(1000*MSEC);
-    straight(20, 30);
+    straight_on(-40);
+    arm_A(GETDEBRIS);
+    straight(20.5, 30);
     turn(90, 30, -30);
     straight(10, 30);
-    linetrace_cm_pd_SP(60, 30, false);
-    linetrace_color_pd_SP(BOTH, COLOR_BLACK, 30, true);
+    linetrace_cm_rgb_pd_SP(15, 20, false);
+    linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 40, true);
     straight(10, -30);
     turn(60, 30, -30);
-    arm_A(GETDEBRIS);
     arm_D(DOWN);
-    straight(10, 30);
+    straight_on(40);
+    straight_off(8, true);
     arm_A(CLOSE);
     tslp_tsk(500*MSEC);
-    straight(25, -30);
+    straight(24, -50);
     turn(105, -30, 30);
     arm_A(GETDEBRIS);
-    straight(83, 30);
-    straight(20, -30);
+    tslp_tsk(100*MSEC);
+    straight(80, 60);
+    straight(20, -40);
     turn(135, 30, -30);
-    straight_on(-30);
-    tslp_tsk(900*MSEC);
+    straight_on(-40);
+    arm_D(UP);
+    tslp_tsk(200*MSEC);
+    straight_on(-10);
+    tslp_tsk(100*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    stopping();
+    straight(21.2, 30);
+    turn(90, 30, -30);
+    straight(40, 40);
+
 
 }
 
 void area_1(){
     linetrace_cm_rgb_pd_SP(6, 20, false);
     linetrace_rgb_pd_SP(LEFT, COLOR_BLACK, 20, false);
-    linetrace_cm_rgb_pd_SP(5.3, 20, false);
+    linetrace_cm_rgb_pd_SP(4.8, 20, false);
     linetrace_cm_rgb_pd_SP(4, 15, true);
     tslp_tsk(100*MSEC);
     turn(90, 30, -30);
@@ -1176,7 +1183,7 @@ void area_1(){
     linetrace_cm_rgb_pd_SP(7, 20, false);
     linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 15, true);
     straight(4, -20);
-    tslp_tsk(200*MSEC);
+    tslp_tsk(100*MSEC);
     turn(90, -30, 30);
     build_house();
     turn(90, 30, -30);
@@ -1202,15 +1209,15 @@ void area_2(){
     linetrace_cm_rgb_pd_SP(20, 40, false);
     linetrace_rgb_pd_SP(BOTH,COLOR_RED,15, true);
     tslp_tsk(100*MSEC);
-    straight(6.8, -20);
-    tslp_tsk(100*MSEC);
+    straight(6.5, -20);
+
     turn(90, -30, 30);
 
 
     take_house();
     turn(90, -30, 30);
     linetrace_cm_rgb_pd_SP(9.9, 20, true);
-    tslp_tsk(200*MSEC);
+
 
 
 
@@ -1259,13 +1266,13 @@ void area_2(){
     linetrace_cm_rgb_pd_SP(6, 20, false);
     linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, false);
     linetrace_cm_rgb_pd_SP(6.5, 15, true);
-    tslp_tsk(200*MSEC);
+
     turn(90, -30, 30);
 
     take_house();
     turn(90, 30, -30);
     linetrace_cm_rgb_pd_SP(9.5, 20, true);
-    tslp_tsk(200*MSEC);
+
 
     turn(90, -30, 30);
     build_house();
@@ -1317,7 +1324,7 @@ void area_2(){
 
 void water(){
     straight(39, 50);
-    tslp_tsk(300*MSEC);
+    tslp_tsk(100*MSEC);
     turn(90, 30, -30);
     straight(20, -60);
     straight_on(-30);
@@ -1385,7 +1392,7 @@ void water(){
     tslp_tsk(100*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    straight(18, 50);
+    straight(19, 50);
     turn(90, -30, 30);
     straight(32, 60);
     arm_D(UP);
@@ -1509,9 +1516,7 @@ void main_task(intptr_t unused) {
 
 
 
-
-
-    int start = 1;
+    int start = 2;
     if(start == 1) start_1();
     if(start == 2) start_2();
 
