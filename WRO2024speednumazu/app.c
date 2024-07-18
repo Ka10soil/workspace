@@ -1267,12 +1267,15 @@ void area_2(){
     linetrace_cm_rgb_pd_SP(6, 20, false);
     linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, false);
     linetrace_cm_rgb_pd_SP(6.5, 15, true);
+    tslp_tsk(100*MSEC);
 
     turn(90, -30, 30);
 
     take_house();
     turn(90, 30, -30);
     linetrace_cm_rgb_pd_SP(9.5, 20, true);
+    tslp_tsk(100*MSEC);
+
 
 
     turn(90, -30, 30);
