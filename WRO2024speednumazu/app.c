@@ -1093,6 +1093,7 @@ void start_2() {
     turn(90, 30, -30);
     straight(10, 40);
     linetrace_cm_rgb_pd_SP(15, 20, false);
+    linetrace_cm_rgb_pd_SP(40, 50, false);
     linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 40, true);
     speed_arm(EV3_PORT_D, DOWN, 20);
     straight(10, -30);
@@ -1174,7 +1175,7 @@ void area_1(){
     linetrace_cm_rgb_pd_SP(7.5, 15, true);
     tslp_tsk(100*MSEC);
     turn(90, 30, -30);
-    stopping();
+
 
 
 
@@ -1232,7 +1233,7 @@ void area_2(){
     linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 20, true);
     tslp_tsk(100*MSEC);
     turn(180, 30, -30);
-    linetrace_cm_rgb_pd_SP(10, 20, false);
+    linetrace_cm_rgb_pd_SP(9.3, 20, false);
     linetrace_cm_rgb_pd_SP(5, 15, true);
     tslp_tsk(200*MSEC);
     speed_arm(EV3_PORT_D, DOWN, 20);
@@ -1344,7 +1345,7 @@ void water(){
     straight(26.5, 60);
 
     turn(90, -30, 30);
-    straight(28, 60);
+    straight(30, 60);
     arm_D(UP);
 
     speed_arm(EV3_PORT_D, DOWN, 25);
@@ -1353,7 +1354,7 @@ void water(){
     arm_A(CLOSE);
     tslp_tsk(300*MSEC);
 
-    straight(10, -30);
+    straight(12, -30);
     turn(145, 30, -30);
     arm_A(GETDEBRIS);
     straight_on(80);
@@ -1400,7 +1401,7 @@ void water(){
     ev3_motor_stop(EV3_PORT_C, true);
     straight(20, 50);
     turn(90, -30, 30);
-    straight(32, 60);
+    straight(31, 60);
     arm_D(UP);
 
 }
