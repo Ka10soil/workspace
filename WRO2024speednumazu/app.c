@@ -37,6 +37,7 @@ const char* logfilename = "/wro_result.txt";
 int battery;
 
 int start = 1;
+int yellow = 4;
 
 
 colorid_t color_3 = 0;
@@ -1060,10 +1061,10 @@ void start_1(){
     arm_A(CLOSE);
     tslp_tsk(400*MSEC);
     straight(6,-40);
-    turn(24, 30, -30);
+    turn(22, 30, -30);
     tslp_tsk(100*MSEC);
     straight_on(-60);
-    straight_off(63, true);
+    straight_off(64, true);
     straight_on(-40);
     tslp_tsk(500*MSEC);
     straight_on(-10);
@@ -1125,11 +1126,11 @@ void start_2() {
     ev3_motor_stop(EV3_PORT_C, true);
     straight(21, 40);
     turn(90, -30, 30);
-    straight(22, 60);
+    straight(23, 60);
 
     arm_D(UP);
 
-    straight(62, -30);
+    straight(63, -40);
     tslp_tsk(200*MSEC);
     turn(180, 30, -30);
 
@@ -1186,40 +1187,46 @@ void area_1(){
     arm_D(UP);
     linetrace_cm_rgb_pd_SP(6, 20, false);
     linetrace_rgb_pd_SP(LEFT, COLOR_BLACK, 25, false);
-    linetrace_cm_rgb_pd_SP(22, 30, false);
-    linetrace_cm_rgb_pd_SP(7.5, 15, true);
-    tslp_tsk(100*MSEC);
-    turn(90, 30, -30);
+    if(yellow == 0){
+        linetrace_cm_rgb_pd_SP(8, 20, true);
+        turn(90, -30, 30);
+        linetrace_cm_rgb_pd_SP(10, 20, false);
+        linetrace_color_pd_SP(BOTH, COLOR_BLACK, 40, true);
+        straight(8, 30);
+        turn(90, 30, -30);
+    }
+    else{
+        linetrace_cm_rgb_pd_SP(22, 30, false);
+        linetrace_cm_rgb_pd_SP(7.5, 15, true);
+        tslp_tsk(100*MSEC);
+        turn(90, 30, -30);
 
+        take_house();
 
-
-
-
-   
-    take_house();
-    turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(7, 20, false);
-    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 15, true);
-    straight(4.5, -20);
-    tslp_tsk(100*MSEC);
-    turn(90, -30, 30);
-    build_house();
-    turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(12, 15, true);
-    turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(10, 20, false);
-    linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 40, true);
-    turn(180, 30, -30);
-    speed_arm(EV3_PORT_D, DOWN, 20);
-    linetrace_cm_rgb_pd_SP(8, 15, true);
-    //straight(2, -20);
-    arm_D(DOWN);
-    arm_A(SET);
-    tslp_tsk(400*MSEC);
-    speed_arm(EV3_PORT_D, UP, 25);
-    straight(14.5, -30);
-    arm_D(UP);
-    turn(90, -30, 30);
+        turn(90, 30, -30);
+        linetrace_cm_rgb_pd_SP(7, 20, false);
+        linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 15, true);
+        straight(4.5, -20);
+        tslp_tsk(100*MSEC);
+        turn(90, -30, 30);
+        build_house();
+        turn(90, 30, -30);
+        linetrace_cm_rgb_pd_SP(12, 15, true);
+        turn(90, 30, -30);
+        linetrace_cm_rgb_pd_SP(10, 20, false);
+        linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 40, true);
+        turn(180, 30, -30);
+        speed_arm(EV3_PORT_D, DOWN, 20);
+        linetrace_cm_rgb_pd_SP(8, 15, true);
+        //straight(2, -20);
+        arm_D(DOWN);
+        arm_A(SET);
+        tslp_tsk(400*MSEC);
+        speed_arm(EV3_PORT_D, UP, 25);
+        straight(14.5, -30);
+        arm_D(UP);
+        turn(90, -30, 30);
+    }
 }
 
 void area_2(){
@@ -1282,63 +1289,77 @@ void area_2(){
     straight(16.3, -40);
     arm_D(UP);
     turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(6, 20, false);//------------------------------------------------------------黄色２個省くやつ
-    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, false);
-    linetrace_cm_rgb_pd_SP(6.5, 15, true);
-    tslp_tsk(100*MSEC);
+    if(yellow != 2 && yellow != 0) {
+        linetrace_cm_rgb_pd_SP(6, 20, false);
+        linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, false);
+        linetrace_cm_rgb_pd_SP(6.5, 15, true);
+        tslp_tsk(100*MSEC);
 
-    turn(90, -30, 30);
+        turn(90, -30, 30);
 
-    take_house();
-    turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(9.5, 20, true);    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^黄色一つ省くやつ　代わりに2cmのライントレース
-    tslp_tsk(100*MSEC);
+        take_house();
+        turn(90, 30, -30);
+        if(yellow != 3){
 
-
-
-    turn(90, -30, 30);
-    build_house();
-    turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(8, 15, true);//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^黄色一つ省くやつ　speed_armの後のturnを逆回転にする・
-    speed_arm(EV3_PORT_D, DOWN, 20);
-    turn(90, -30, 30);
-
-    arm_D(DOWN);
-    arm_A(GETDEBRIS);
-    tslp_tsk(100*MSEC);
-    linetrace_cm_rgb_pd_SP(8, 15, false);
-
-    straight_on(10);
-    straight_off(1, false);
-    speed_arm(EV3_PORT_A, CLOSE, 15);
-    straight_off(1, true);
-    tslp_tsk(500*MSEC);
-    arm_A(SET);
-    straight(3, -10);
-    speed_arm(EV3_PORT_A, CLOSE, 30);
-    tslp_tsk(400*MSEC);
-    straight(8, -10);
-    arm_A(SET);
-    straight_on(10);
-    straight_off(2.5, false);
-    speed_arm(EV3_PORT_A, CLOSE, 30);
-    straight_off(2, true);
-    speed_arm(EV3_PORT_D, UP, 56);
-    straight(12.3, 20);
-    arm_D(SETNEW_2);
+            linetrace_cm_rgb_pd_SP(9.5, 20, true);    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^黄色一つ省くやつ　代わりに2cmのライントレース
+            tslp_tsk(100*MSEC);
 
 
 
-    arm_A(SET);
+            turn(90, -30, 30);
+            build_house();
+            turn(90, -30, 30);
+            linetrace_cm_rgb_pd_SP(8, 15, true);//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^黄色一つ省くやつ　speed_armの後のturnを逆回転にする・
+            speed_arm(EV3_PORT_D, DOWN, 20);
+            turn(90, -30, 30);
+        }
+        else{
+            linetrace_cm_rgb_pd_SP(2, 20, true);
+            speed_arm(EV3_PORT_D, DOWN, 20);
+            turn(90, 30, -30);
+        }
+        arm_D(DOWN);
+        arm_A(GETDEBRIS);
+        tslp_tsk(100*MSEC);
+        linetrace_cm_rgb_pd_SP(8, 15, false);
+
+        straight_on(10);
+        straight_off(1, false);
+        speed_arm(EV3_PORT_A, CLOSE, 15);
+        straight_off(1, true);
+        tslp_tsk(500*MSEC);
+        arm_A(SET);
+        straight(3, -10);
+        speed_arm(EV3_PORT_A, CLOSE, 30);
+        tslp_tsk(400*MSEC);
+        straight(8, -10);
+        arm_A(SET);
+        straight_on(10);
+        straight_off(2.5, false);
+        speed_arm(EV3_PORT_A, CLOSE, 30);
+        straight_off(2, true);
+        speed_arm(EV3_PORT_D, UP, 56);
+        straight(12.3, 20);
+        arm_D(SETNEW_2);
 
 
-    straight(16.5, -40);
+
+        arm_A(SET);
 
 
-    turn(90, -30, 30);
-    speed_arm(EV3_PORT_D, UP, 28);
+        straight(16.5, -40);
 
-    //---------------------------------------黄色２個の場合ここに早いライントレース30cmを入れても良い
+
+        turn(90, -30, 30);
+        speed_arm(EV3_PORT_D, UP, 28);
+
+    } //---------------------------------------黄色２個の場合ここに早いライントレース30cmを入れても良い
+    if(yellow == 2 || yellow == 0)linetrace_cm_rgb_pd_SP(30, 40, false);
+    else{
+        linetrace_cm_rgb_pd_SP(7, 20, false);
+        speed_arm(EV3_PORT_D, UP, 20);
+    }     
+
     linetrace_cm_rgb_pd_SP(7, 20, false);         
     linetrace_rgb_pd_SP(BOTH, COLOR_RED, 40, true);
     arm_D(ALLUP);
@@ -1357,7 +1378,7 @@ void water(){
     ev3_motor_stop(EV3_PORT_C, true);
     tslp_tsk(100*MSEC);
 
-    straight(26.5, 60);
+    straight(26.5, 50);
 
     turn(90, -30, 30);
     straight(30, 60);
@@ -1397,8 +1418,9 @@ void water(){
     linetrace_cm_rgb_pd_SP(15, 20, false);
     if(start == 2){
         linetrace_rgb_pd_SP(BOTH, COLOR_RED, 50, false);
-        straight(47, 80);
-        turn(130, 0, 30);
+        straight_on(70);
+        straight_off(47, true);
+        turn(120, 0, 80);
     }
     if(start == 1){
         linetrace_rgb_pd_SP(BOTH, COLOR_RED, 50, false);
@@ -1546,7 +1568,7 @@ void main_task(intptr_t unused) {
     ev3_motor_stop(EV3_PORT_D, true);
 
     
-
+    yellow = 4;
     start = 1;
 
     if(start == 1) start_1();
