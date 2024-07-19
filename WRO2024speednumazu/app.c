@@ -1267,7 +1267,7 @@ void area_2(){
     straight(16.3, -40);
     arm_D(UP);
     turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(6, 20, false);
+    linetrace_cm_rgb_pd_SP(6, 20, false);//------------------------------------------------------------黄色２個省くやつ
     linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, false);
     linetrace_cm_rgb_pd_SP(6.5, 15, true);
     tslp_tsk(100*MSEC);
@@ -1276,7 +1276,7 @@ void area_2(){
 
     take_house();
     turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(9.5, 20, true);
+    linetrace_cm_rgb_pd_SP(9.5, 20, true);    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^黄色一つ省くやつ　代わりに2cmのライントレース
     tslp_tsk(100*MSEC);
 
 
@@ -1284,7 +1284,7 @@ void area_2(){
     turn(90, -30, 30);
     build_house();
     turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(8, 15, true);
+    linetrace_cm_rgb_pd_SP(8, 15, true);//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^黄色一つ省くやつ　speed_armの後のturnを逆回転にする・
     speed_arm(EV3_PORT_D, DOWN, 20);
     turn(90, -30, 30);
 
@@ -1323,8 +1323,8 @@ void area_2(){
     turn(90, -30, 30);
     speed_arm(EV3_PORT_D, UP, 28);
 
-
-    linetrace_cm_rgb_pd_SP(7, 20, false);
+    //---------------------------------------黄色２個の場合ここに早いライントレース30cmを入れても良い
+    linetrace_cm_rgb_pd_SP(7, 20, false);         
     linetrace_rgb_pd_SP(BOTH, COLOR_RED, 40, true);
     arm_D(ALLUP);
 }
@@ -1522,8 +1522,10 @@ void main_task(intptr_t unused) {
     ev3_motor_stop(EV3_PORT_D, true);
 
 
+    
 
-    int start = 2;
+
+    int start = 1;
 
 
     if(start == 1) start_1();
