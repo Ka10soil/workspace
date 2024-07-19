@@ -1052,16 +1052,18 @@ void start_1(){
     }
     straight_on(30);
     straight_off(5, true);
+    tslp_tsk(100*MSEC);
     turn(40, 0, 30);
-    straight_on(30);
+    straight_on(25);
     straight_off(6, true);
     arm_A(CLOSE);
     tslp_tsk(400*MSEC);
-    straight_on(-30);
+    straight_on(-25);
     straight_off(6, true);
-    turn(20, 30, -30);
+    tslp_tsk(100*MSEC);
+    turn(19, 30, -30);
     straight_on(-60);
-    straight_off(62, true);
+    straight_off(62, false);
     straight_on(-40);
     tslp_tsk(500*MSEC);
     straight_on(-10);
@@ -1074,9 +1076,22 @@ void start_1(){
     straight(38, 60);
     arm_A(GETDEBRIS);
     speed_arm(EV3_PORT_D, UP, 20);
-    straight(38, -60);
+    straight(15, -60);
     arm_D(UP);
-    turn(160, -30, 30);
+    turn(110, 30, -30);
+    speed_arm(EV3_PORT_D, UP, 20);
+    straight(12, -40);
+    straight_on(-40);
+    tslp_tsk(500*MSEC);
+    straight_on(-10);
+    tslp_tsk(100*MSEC);
+    arm_D(ALLUP);
+    straight(21, 40);
+    turn(90, -30, 30);
+    straight(28, 60);
+    arm_D(UP);
+    straight(54, -40);
+    turn(180, -30, 30);
 
 
     straight(12, 30);
@@ -1114,12 +1129,21 @@ void start_2() {
     arm_D(UP);
     tslp_tsk(200*MSEC);
     straight_on(-10);
+    arm_D(ALLUP);
     tslp_tsk(100*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    straight(21.2, 30);
-    turn(90, 30, -30);
-    straight(40, 40);
+    straight(21, 40);
+    turn(90, -30, 30);
+    straight(22, 60);
+
+    arm_D(UP);
+
+    straight(62, -30);
+    tslp_tsk(200*MSEC);
+    turn(180, 30, -30);
+
+
 
 
 }
@@ -1127,11 +1151,12 @@ void start_2() {
 void area_1(){
     linetrace_cm_rgb_pd_SP(6, 20, false);
     linetrace_rgb_pd_SP(LEFT, COLOR_BLACK, 20, false);
-    linetrace_cm_rgb_pd_SP(4.8, 20, false);
-    linetrace_cm_rgb_pd_SP(4, 15, true);
+    //linetrace_cm_rgb_pd_SP(4.8, 20, false);
+    linetrace_cm_rgb_pd_SP(8.8, 15, true);
     tslp_tsk(100*MSEC);
     turn(90, 30, -30);
 
+    stopping();
 
     take_house();
 
@@ -1379,15 +1404,17 @@ void water(){
     
 
 
-    linetrace_cm_rgb_pd_SP(10, 20, false);
+    linetrace_cm_rgb_pd_SP(15, 20, false);
     linetrace_rgb_pd_SP(BOTH, COLOR_RED, 50, false);
 
 
-    straight(40, 60);
-    turn(40, -30, 30);
-    speed_arm(EV3_PORT_A, OPEN, 8);
-    straight(20, 50);
-    arm_A(GETDEBRIS);
+    straight(47, 80);
+    turn(130, 0, 30);
+
+
+
+
+    /*arm_A(GETDEBRIS);
     straight(14, -50);
     turn(130, 30, -30);
     speed_arm(EV3_PORT_D, UP, 50);
@@ -1402,7 +1429,7 @@ void water(){
     straight(20, 50);
     turn(90, -30, 30);
     straight(31, 60);
-    arm_D(UP);
+    arm_D(UP);*/
 
 }
 
@@ -1510,9 +1537,9 @@ void main_task(intptr_t unused) {
 
     ev3_motor_reset_counts(EV3_PORT_D);
 
-
+    ev3_motor_rotate(EV3_PORT_D, 60, 15, true);
     arm_A(OPEN);
-    ev3_motor_set_power(EV3_PORT_D, 3);
+    ev3_motor_set_power(EV3_PORT_D, 7);
     tslp_tsk(300*MSEC);
 
     ev3_motor_reset_counts(EV3_PORT_D);
@@ -1520,9 +1547,6 @@ void main_task(intptr_t unused) {
 
     ev3_motor_stop(EV3_PORT_A,true);
     ev3_motor_stop(EV3_PORT_D, true);
-
-
-    
 
 
     int start = 1;
