@@ -151,7 +151,7 @@ void turn(int angle, int lb_power, int rc_power){
         }
         if (lb_power != 0 && rc_power != 0){
             if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > average) changing_power = changing_power + 0.003;
-            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.018;
+            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.14;
             if (changing_power <= 15) changing_power = 15;
             if (changing_power >= maximum) changing_power = maximum;
             if (goal_angle <= average) break; 
@@ -558,6 +558,7 @@ void linetrace_color_pd_SP(port_t port, colorid_t color, int power, bool_t stop)
 }
 
 void linetrace_cm_rgb_pd_SP(float cm, int power, bool_t stop){
+
     ev3_motor_reset_counts(EV3_PORT_B);
     ev3_motor_reset_counts(EV3_PORT_C);
     int now_angle_lb = 0;
@@ -638,8 +639,10 @@ void linetrace_cm_rgb_pd_SP(float cm, int power, bool_t stop){
 }
 
 void linetrace_rgb_pd_SP(port_t port, colorid_t color, int power, bool_t stop){
+    
     ev3_motor_reset_counts(EV3_PORT_B);
     ev3_motor_reset_counts(EV3_PORT_C);
+
     int lb_power;
     int rc_power;
     rgb_raw_t rgb_val;//カラーセンサーの値を保存するために必要な変数(必須)
@@ -1004,6 +1007,7 @@ void straight(float cm, int power){
     int now_left_angle = 0;
     int now_angle = 0; 
     int diff = 0;
+
     int maximum = abs(power);
     float changing_power = 14;
     int sign = power/abs(power);
