@@ -55,7 +55,7 @@ colorid_t obj_color;
 static const sensor_port_t  PortSensorColor1 = EV3_PORT_1;
 static const sensor_port_t  PortSensorColor2 = EV3_PORT_2; //左
 static const sensor_port_t  PortSensorColor3 = EV3_PORT_3; //右
-static const sensor_port_t  PortSensorColor4 = EV3_PORT_4; //超音波はここ
+static const sensor_port_t  PortSensorGyro = EV3_PORT_4; //ジャイロセンサー
 
 static const motor_port_t   PortMotorArmUp   = EV3_PORT_A; //オブジェをとる
 static const motor_port_t   PortMotorLeft    = EV3_PORT_B; //lb
@@ -66,6 +66,7 @@ static const motor_port_t   PortMotorArmDown = EV3_PORT_D; //オブジェを落�
 void stopping();
 void straight(float cm, int power);
 void turn(int angle, int lb_power, int rc_power);
+void turn_gyro(int angle, int lb_power, int rc_power);
 void gain_set(int power, float *p_gain, float *d_gain);
 void gain_set_rgb(int power, float *p_gain, float *d_gain);
 void gain_set_pid(int power, float *p_gain, float *d_gain, float *i_gain);
@@ -120,10 +121,12 @@ void turn(int angle, int lb_power, int rc_power){
         turn_num = 0.152;
     }
     if (lb_power > 0 && rc_power < 0) {
-        turn_num = 0.1533;
+        //turn_num = 0.1533;
+        turn_num = 0.159;
     }
     if (lb_power < 0 && rc_power > 0) {
-        turn_num = 0.153;
+        //turn_num = 0.153;
+        turn_num = 0.1557;
     }
     if (abs(lb_power) >= abs(rc_power)) maximum = abs(lb_power);
     if (abs(rc_power) > abs(lb_power)) maximum = abs(rc_power);
@@ -153,7 +156,7 @@ void turn(int angle, int lb_power, int rc_power){
         }
         if (lb_power != 0 && rc_power != 0){
             if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > average) changing_power = changing_power + 0.003;
-            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.018;
+            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.014;
             if (changing_power <= 15) changing_power = 15;
             if (changing_power >= maximum) changing_power = maximum;
             if (goal_angle <= average) break; 
@@ -167,6 +170,94 @@ void turn(int angle, int lb_power, int rc_power){
     ev3_motor_stop(EV3_PORT_C, true);
 }
 
+void turn_gyro(int angle, int lb_power, int rc_power){
+    tslp_tsk(200*MSEC);
+    if(angle > 100) tslp_tsk(200*MSEC);
+    if (lb_power == 30) lb_power = lb_power + 35;
+    if (lb_power == -30) lb_power = lb_power - 35;
+    if (rc_power == 30) rc_power = rc_power + 35;
+    if (rc_power == -30) rc_power = rc_power - 35;
+
+    ev3_motor_reset_counts(EV3_PORT_B);
+    ev3_motor_reset_counts(EV3_PORT_C);
+    ev3_gyro_sensor_reset(EV3_PORT_4);
+    int lb_sign = lb_power / abs(lb_power);
+    int rc_sign = rc_power / abs(rc_power);
+    int now_right_angle = 0;
+    int now_left_angle = 0;
+    int average = 0;
+    int maximum = 80;
+    int points = 55;
+    int gyro_power = 10;
+    float turn_num = 0.1525;
+    float gyro_angle = 0;
+    if (abs(lb_power) == 0 || abs(rc_power) == 0) {
+        turn_num = 0.152;
+    }
+    if (lb_power > 0 && rc_power < 0) {
+        //turn_num = 0.1533;
+        turn_num = 0.159;
+    }
+    if (lb_power < 0 && rc_power > 0) {
+        //turn_num = 0.153;
+        turn_num = 0.1557;
+    }
+    if (abs(lb_power) >= abs(rc_power)) maximum = abs(lb_power);
+    if (abs(rc_power) > abs(lb_power)) maximum = abs(rc_power);
+    float changing_power = 15;
+    int goal_angle = angle*turn_num*ROBOT1CM;
+    while (true) {
+        now_left_angle = abs(ev3_motor_get_counts(EV3_PORT_B));
+        now_right_angle = abs(ev3_motor_get_counts(EV3_PORT_C));
+        average = (now_left_angle + now_right_angle) / 2;
+        
+        if (changing_power <= 15) changing_power = 15;
+        if (lb_power == 0) {
+            if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > now_right_angle) changing_power = changing_power + 0.005;
+            if (goal_angle - ((points + 5)*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.14;
+            if (changing_power <= 15) changing_power = 15;
+            if (goal_angle <= now_right_angle) break; 
+            rc_power = changing_power*rc_sign;
+            ev3_motor_set_power(EV3_PORT_C, rc_power);
+        }
+        if (rc_power == 0) {
+            if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > now_left_angle) changing_power = changing_power + 0.005;
+            if (goal_angle - ((points + 5)*turn_num*ROBOT1CM) <= now_left_angle) changing_power = changing_power - 0.14;
+            if (changing_power <= 15) changing_power = 15;
+            if (goal_angle <= now_left_angle) break; 
+            lb_power = -changing_power*lb_sign;
+            ev3_motor_set_power(EV3_PORT_B, lb_power);
+        }
+        if (lb_power != 0 && rc_power != 0){
+            if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > average) changing_power = changing_power + 0.003;
+            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.014;
+            if (changing_power <= 15) changing_power = 15;
+            if (changing_power >= maximum) changing_power = maximum;
+            if (goal_angle <= average) break; 
+            rc_power = changing_power*rc_sign;
+            lb_power = -changing_power*lb_sign;
+            ev3_motor_set_power(EV3_PORT_C, rc_power);
+            ev3_motor_set_power(EV3_PORT_B, lb_power);
+        }  
+    }
+    //gyro_turn
+    gyro_angle = abs(ev3_gyro_sensor_get_angle(EV3_PORT_4));
+    if (angle - 5 <= gyro_angle && gyro_angle <= angle + 5){
+        while (true) {
+            gyro_angle = ev3_gyro_sensor_get_angle(EV3_PORT_4);
+            if (gyro_angle > angle) gyro_power = gyro_power * -1; 
+            rc_power = 10*rc_sign;
+            lb_power = -10*lb_sign;
+            ev3_motor_set_power(EV3_PORT_C, rc_power);
+            ev3_motor_set_power(EV3_PORT_B, lb_power);
+            if(gyro_angle == angle) break;
+        }
+    }
+    
+    ev3_motor_stop(EV3_PORT_B, true);
+    ev3_motor_stop(EV3_PORT_C, true);
+}
+
 void arm_A(armmode_new_t mode){
     now_arm_angle_A = ev3_motor_get_counts(EV3_PORT_A);
     switch (mode) {
@@ -175,7 +266,7 @@ void arm_A(armmode_new_t mode){
             else ev3_motor_set_power(EV3_PORT_A, -60);
             break;
         case CLOSE:
-            if(now_arm_angle_A <= -90)ev3_motor_set_power(EV3_PORT_A, 60);
+            if(now_arm_angle_A <= -110)ev3_motor_set_power(EV3_PORT_A, 60);
             else ev3_motor_set_power(EV3_PORT_A, -60);
 
             break;
@@ -188,7 +279,7 @@ void arm_A(armmode_new_t mode){
         if(now_arm_angle_A <= -219 && now_arm_angle_A >= -221 && mode == GET_OBJ_2) break;
         if(now_arm_angle_A <= -179 && now_arm_angle_A >= -181 && mode == GETDEBRIS) break;
         if(now_arm_angle_A <= 91 && now_arm_angle_A >= 89 && mode == OPEN) break;
-        if(now_arm_angle_A <= -89 && now_arm_angle_A >= -91 && mode == CLOSE) break;
+        if(now_arm_angle_A <= -109 && now_arm_angle_A >= -111 && mode == CLOSE) break;
 
         
     }
@@ -424,7 +515,7 @@ void gain_set_rgb(int power, float *p_gain, float *d_gain){
         *d_gain = 80;   
     }
     if(power > 10 && power <= 20){
-        *p_gain = 0.1;   
+        *p_gain = 0.17;   
         *d_gain = 100;   
     }
     if(power == 24){
@@ -432,15 +523,15 @@ void gain_set_rgb(int power, float *p_gain, float *d_gain){
         *d_gain = 60;   
     }
     if(power > 20 && power <= 30 && power != 24){
-        *p_gain = 0.07;   
-        *d_gain = 80;   
+        *p_gain = 0.12;   
+        *d_gain = 140;   
     }
     if(power > 30 && power <= 40){
-        *p_gain = 0.04;   
+        *p_gain = 0.05;   
         *d_gain = 90;   
     }
     if(power > 40 && power <= 50){
-        *p_gain = 0.04;   
+        *p_gain = 0.05;   
         *d_gain = 100;   
     }
     if(power > 50 && power <= 60){
@@ -1555,7 +1646,7 @@ void main_task(intptr_t unused) {
     ev3_sensor_config(PortSensorColor1, COLOR_SENSOR);
     ev3_sensor_config(PortSensorColor2, COLOR_SENSOR);
     ev3_sensor_config(PortSensorColor3, COLOR_SENSOR);
-    ev3_sensor_config(PortSensorColor4, COLOR_SENSOR);
+    ev3_sensor_config(PortSensorGyro, GYRO_SENSOR);
     
     fprintf(bt, "----GAME_START----\r\n");
     file=fopen(logfilename,"a");//ファイルをオープン(名前の指定)
@@ -1579,33 +1670,6 @@ void main_task(intptr_t unused) {
     
     yellow = 4;
     start = 1;
-
-    arm_A(CLOSE);
-    arm_D(THREE);
-    straight(21, 20);
-    arm_D(TWO);
-    arm_A(OPEN);
-    arm_D(FOUR);
-    
-    arm_A(CLOSE);
-
-    stopping();
-
-    arm_D(ALLUP);
-
-    stopping();
-
-    straight(21, -30);
-    arm_D(DOWN);
-
-
-
-
-
-    stopping();
-
-
-
 
 
 
@@ -1673,11 +1737,13 @@ void main_task(intptr_t unused) {
     linetrace_cm_rgb_pd_SP(10, 20, false);
     linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 40, true);
     turn(180, 30, -30);
-    straight(15, 30);
+    linetrace_cm_rgb_pd_SP(11, 20, true);
+    turn(40, 0, 30);
     arm_A(OPEN);
     arm_D(TWO);
     arm_A(CLOSE);
     arm_D(THREE);
+    turn(40, 0, -30);
     straight(15, -30);
     arm_D(DOWN);
     turn(90, -30, 30);
@@ -1737,20 +1803,22 @@ void main_task(intptr_t unused) {
     }
     straight(5, 20);
     turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(8, 15, false);
-    linetrace_color_pd_SP(LEFT, COLOR_BLACK, 20, false);
-    linetrace_cm_rgb_pd_SP(10, 20, true);
+    linetrace_cm_rgb_pd_SP(6, 15, false);
+    linetrace_color_pd_SP(RIGHT, COLOR_BLACK, 20, false);
+    linetrace_cm_rgb_pd_SP(5, 20, true);
     turn(90, 30, -30);
 
     stopping();
 
     arm_D(THREE);
-    straight(21, 20);
+    linetrace_cm_rgb_pd_SP(16, 20, true);
+    turn(40, 0, 30);
     arm_D(TWO);
     arm_A(OPEN);
-    arm_D(FOUR);
+    arm_D(FOUR);    
     arm_A(CLOSE);
     arm_D(ALLUP);
+    turn(40, 0, -30);
     straight(21, -30);
     arm_D(DOWN);
     turn(90, -30, 30);
