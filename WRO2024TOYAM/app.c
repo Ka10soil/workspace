@@ -975,6 +975,7 @@ void color_check(port_t port){
     float green = 0;
     float blue = 0;
     ev3_color_sensor_get_rgb_raw(port, &rgb_val);
+    ev3_color_sensor_get_rgb_raw(port, &rgb_val);
     red = rgb_val.r;
     green = rgb_val.g;
     blue = rgb_val.b;
@@ -982,21 +983,20 @@ void color_check(port_t port){
     fprintf(bt, "sensor:r%f g:%f b:%f\r\njudge_color %d\r\n", red, green, blue, obj_color);
 }
 
-colorid_t gb_check(port_t port){
+void gb_check(port_t port){
     rgb_raw_t rgb_val;//カラーセンサーの値を保存するために必要な変数(必須)
-    colorid_t judge_color;
-    float red = 0;
-    float green = 0;
-    float blue = 0;
+    int red = 0;
+    int green = 0;
+    int blue = 0;
+    ev3_color_sensor_get_rgb_raw(port, &rgb_val);
     ev3_color_sensor_get_rgb_raw(port, &rgb_val);
     red = rgb_val.r;
     green = rgb_val.g;
     blue = rgb_val.b;
     obj_color = rgb_color(red, green, blue);
-    if(green > blue) judge_color = COLOR_GREEN;
-    else judge_color = COLOR_BLUE;
-    fprintf(bt, "sensor:r%f g:%f b:%f\r\njudge_color %d\r\n", red, green, blue, obj_color);
-    return judge_color;
+    if(green > blue) bg_color = COLOR_GREEN;
+    else bg_color = COLOR_BLUE;
+    fprintf(bt, "sensor:r%d g:%d b:%d\r\njudge_color %d\r\n", red, green, blue, bg_color);
 }
 
 void straight_on(int power){
@@ -1774,13 +1774,12 @@ void main_task(intptr_t unused) {
 
     
 
+
+
     stopping();
-    turn(90, 30, -30);
-    stopping();
-    turn(90, -30, 30);
-    stopping();
-    arm_D(UP);
-    stopping();
+   
+
+
 
 
 
@@ -1878,7 +1877,7 @@ void main_task(intptr_t unused) {
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
         tslp_tsk(100*MSEC);
-        straight(8, 30);
+        straight(7.2, 30);
         turn(90, 30, -30);
         straight(15, -30);
         
@@ -1948,19 +1947,19 @@ void main_task(intptr_t unused) {
         ev3_motor_stop(EV3_PORT_C, true);
     }
 
-    straight(31, 30);
+    straight(33, 30);
     turn(90, -30, 30);
 
     straight(24, 30);
     arm_D(UP);
     turn(20, 30, -30);
-    turn(21, -30, 30);
+    turn(20, -30, 30);
 
-    straight(3.5, -20);
+    straight(2.5, -20);
     tslp_tsk(100*MSEC);
 
     turn(90, -30, 30);
-    straight(7.5, 30);
+    straight(8, 30);
 
     arm_A(OPEN);
     arm_D(DOWN);
@@ -1972,8 +1971,8 @@ void main_task(intptr_t unused) {
     arm_A(CLOSE);
     arm_D(TWO);
     
-    bg_color = gb_check(EV3_PORT_4);
-    straight(17.3, -30);
+    gb_check(EV3_PORT_1);
+    straight(17.8, -30);
     turn(90, 30, -30);
     straight(8, 30);
     arm_D(ALLUP);
