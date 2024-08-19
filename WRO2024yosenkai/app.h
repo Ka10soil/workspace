@@ -75,16 +75,15 @@ typedef enum port {
 typedef enum armmode {
     RIGHTDOWN,
     LEFTDOWN,
+    SET,
     RIGHTDOWNRIGHT,
     LEFTDOWNLEFT
 } armmode_t ;
 
 typedef enum armmode_new {
     UP,
-    ALLUP,
     DOWN,
     SETNEW,
-    SETNEW_2,
     SETNEWSHIP,
     CLOSESHIP,
     OBJDOWN,
@@ -92,16 +91,7 @@ typedef enum armmode_new {
     CLOSE,
     SETSHIP,
     SETOPEN,
-    SETCLOSE,
-    SET,
-    ON_CLOSE,
-    ON_OPEN,
-    GETDEBRIS,
-    GET_OBJ_2,
-    ONE,
-    TWO,
-    THREE,
-    FOUR
+    SETCLOSE
 } armmode_new_t ;
 
 
@@ -124,7 +114,6 @@ typedef enum armmode_new {
 
 extern void	task(intptr_t exinf);
 extern void	main_task(intptr_t exinf);
-extern void	arm_task(intptr_t exinf);
 extern void balance_task(intptr_t exinf);
 extern void idle_task(intptr_t exinf);
 //extern void	tex_routine(TEXPTN texptn, intptr_t exinf);
