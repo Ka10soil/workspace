@@ -744,7 +744,7 @@ void gain_set_rgb(int power, float *p_gain, float *d_gain){
         *p_gain = 0.25;   
         *d_gain = 80;   
         if(now_mode == THREE || now_mode == FOUR) {
-            *p_gain = 0.17;   
+            *p_gain = 0.14;   
             *d_gain = 80; 
         }
     }
@@ -1530,6 +1530,7 @@ void start_1(){
 
     linetrace_cm_rgb_pd_SP(10, 20, false);
     linetrace_color_pd_SP(BOTH, COLOR_BLACK, 20, true);
+    tslp_tsk(100*MSEC);
     straight(2.5, -20);
     tslp_tsk(100*MSEC);
     turn(90, 30, -30);
@@ -1540,10 +1541,11 @@ void start_1(){
     straight(8, 30);
     arm_D(ALLUP);
     tslp_tsk(100*MSEC);
-    turn(190, 30, -30);
-    turn(10, -30, 30);
+    turn(189, 30, -30);
+    tslp_tsk(100*MSEC);
+    turn(9, -30, 30);
     arm_D(THREE);
-    straight(15, 40);
+    straight(10, 30);
     arm_D(ALLUP);
 
 
@@ -1554,7 +1556,7 @@ void start_1(){
 
 
 
-    straight(46, 50);
+    straight(51, 50);
     turn(60, 30, -30);
     straight(30, 40);
     turn(60, 30, 0);
@@ -1571,13 +1573,13 @@ void start_1(){
 
     straight_on(-50);
     while (true){
-    color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-    if(color_3 != COLOR_WHITE) break;
+    color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
+    if(color_2 != COLOR_WHITE) break;
     }
     straight_off(5, false);
     while (true){
-    color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-    if(color_3 == COLOR_WHITE) break;
+    color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
+    if(color_2 == COLOR_WHITE) break;
     }
     straight_off(12, true);
     tslp_tsk(200*MSEC);
@@ -1704,7 +1706,8 @@ void start_2() {
 
 
 void area_1(){
-    straight(8.5, 30);  
+    straight(8.5, 20);
+    arm_A(OPEN);
 
 
     arm_D(DOWN);
@@ -1809,7 +1812,7 @@ void area_2(){
     }
 
    
-    straight(8.5, 30);
+    straight(8.5, 20);
 
 
 
@@ -2081,8 +2084,6 @@ void main_task(intptr_t unused) {
     
 
     /* ここからコーディング */
-    ev3_motor_reset_counts(EV3_PORT_A);
-    ev3_motor_reset_counts(EV3_PORT_D);
 
 
     
@@ -2122,11 +2123,18 @@ void main_task(intptr_t unused) {
 
     while(ev3_button_is_pressed(ENTER_BUTTON) == false) {}    
     tslp_tsk(200*MSEC);
+    while (true)
+    {
+        gb_check(EV3_PORT_3);
+        stopping();
+    }
+    
 
 
 
 
-
+    ev3_motor_reset_counts(EV3_PORT_A);
+    ev3_motor_reset_counts(EV3_PORT_D);
 
 
 
@@ -2174,9 +2182,10 @@ void main_task(intptr_t unused) {
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
     
-        straight(2, 30);
-        turn(91, 30, -30);
+        straight(2, 20);
+        turn(92, 30, -30);
         straight(6, 30);
+        tslp_tsk(100*MSEC);
         straight_on(-20);
         while (true){
             color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
@@ -2184,7 +2193,9 @@ void main_task(intptr_t unused) {
         }
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
+        tslp_tsk(100*MSEC);
         straight(49, 50);
+        tslp_tsk(100*MSEC);
 
 
 
