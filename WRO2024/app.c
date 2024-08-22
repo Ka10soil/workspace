@@ -36,13 +36,17 @@ const char* logfilename = "/wro_result.txt";
  */
 int battery;
 
-int start = 1;
+int start = 2;
 int yellow = 4;
 colorid_t bg_color = 2;
 
 
 colorid_t color_3 = 0;
 colorid_t color_2 = 0;
+rgb_raw_t rgb_val;
+int red;
+int green;
+int blue;
 
 armmode_t now_armmode = SET;
 armmode_new_t now_mode = SET;
@@ -999,6 +1003,7 @@ void linetrace_rgb_pd_SP(port_t port, colorid_t color, int power, bool_t stop){
     int steering;
     float p_gain;
     float d_gain;
+
     colorid_t result2;
     colorid_t result3;
     gain_set_rgb(power, &p_gain, &d_gain);
@@ -1194,6 +1199,7 @@ colorid_t rgb_color(float r, float g, float b){
     else if(h >= 100 && h < 140) result = COLOR_GREEN;
     else if(h >= 140 && h < 250) result = COLOR_BLUE;
 
+    if(g > 130 && b < 40) result = COLOR_YELLOW;
 
     return result;
 
@@ -1753,21 +1759,19 @@ void area_1(){
         if(now_reflect_3 <= 10) break;
     }
     straight_off(2, true);    
-    linetrace_cm_rgb_pd_SP(13, 20, true);
+    linetrace_cm_rgb_pd_SP(16, 20, true);
     straight(28, 40);
-    //linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 20, true);
-    straight_on(30);
-    while (true){
-        now_reflect_3 = ev3_color_sensor_get_reflect(EV3_PORT_3);
-        now_reflect_2 = ev3_color_sensor_get_reflect(EV3_PORT_2);
-        if(now_reflect_3 <= 10 && now_reflect_2 <= 10) break;
-    }
+    linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 20, true);
+    
     straight(4, 20);
     tslp_tsk(100*MSEC);
     turn(180, 30, -30);
-    linetrace_cm_rgb_pd_SP(18, 20, true);
+
+
+    linetrace_rgb_pd_SP(BOTH, COLOR_YELLOW, 20, true);
+    straight(4.5, -20);
     arm_A(OPEN);
-    turn(41, 0, 30);
+    turn(40, 0, 30);
     turn(5, 0, -29);
     arm_D(TWO);
     arm_A(CLOSE);
@@ -1857,8 +1861,7 @@ void area_2(){
             now_reflect_3 = ev3_color_sensor_get_reflect(EV3_PORT_3);
             if(now_reflect_3 <= 10) break;
         }
-        straight_off(2, true);    
-        linetrace_cm_rgb_pd_SP(1, 20, false);
+        straight_off(4, true);    
 
     }
     if(start == 2) {
@@ -1880,7 +1883,7 @@ void area_2(){
         turn(90, 30, -30);
         linetrace_cm_rgb_pd_SP(6, 20, false);
         linetrace_color_pd_SP(LEFT, COLOR_BLACK, 20, false);
-        linetrace_cm_rgb_pd_SP(5, 20, true);
+        straight(5, 30);
         turn(90, -30, 30);
         
     }
@@ -1888,7 +1891,7 @@ void area_2(){
     linetrace_cm_rgb_pd_SP(8, 20, true);
     arm_A(CLOSE);
     arm_D(THREE);
-    linetrace_cm_rgb_pd_SP(7, 20, true);
+    linetrace_cm_rgb_pd_SP(8, 20, true);
     tslp_tsk(100*MSEC);
 
 
@@ -2121,14 +2124,8 @@ void main_task(intptr_t unused) {
    
 
 
-    while(ev3_button_is_pressed(ENTER_BUTTON) == false) {}    
+    while(ev3_button_is_pressed(ENTER_BUTTON) == false){}    
     tslp_tsk(200*MSEC);
-    while (true)
-    {
-        gb_check(EV3_PORT_3);
-        stopping();
-    }
-    
 
 
 
@@ -2140,7 +2137,7 @@ void main_task(intptr_t unused) {
 
     
     yellow = 4;
-    start = 1;
+    start = 2;
 
     switch (start) {
     case 1:
@@ -2182,19 +2179,19 @@ void main_task(intptr_t unused) {
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
     
-        straight(2, 20);
+        straight(2.6, 20);
         turn(92, 30, -30);
-        straight(6, 30);
         tslp_tsk(100*MSEC);
-        straight_on(-20);
+        straight_on(30);
+        straight_off(10, false);
         while (true){
-            color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-            if(color_3 == COLOR_WHITE) break;
+            ev3_color_sensor_get_rgb_raw(EV3_PORT_3, &rgb_val);
+            red = rgb_val.r;
+            green = rgb_val.g;
+            blue = rgb_val.b;
+            if(green >= 100) break;
         }
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-        tslp_tsk(100*MSEC);
-        straight(49, 50);
+        straight(17, 30);
         tslp_tsk(100*MSEC);
 
 
