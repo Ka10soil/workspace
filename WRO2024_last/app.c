@@ -1598,9 +1598,9 @@ void start_1(){
     tslp_tsk(300*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    straight(2.5, 20);
+    straight(2.2, 20);
     turn(91, 30, -30);
-    straight_on(20);
+    straight_on(30);
     while (true){
     color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
     if(color_3 == COLOR_WHITE) break;
@@ -1609,7 +1609,8 @@ void start_1(){
         color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
         if(color_3 == COLOR_RED) break;
     }
-    
+    ev3_motor_stop(EV3_PORT_B, true);
+    ev3_motor_stop(EV3_PORT_C, true);
 
 
 
@@ -1692,9 +1693,9 @@ void start_2() {
     tslp_tsk(300*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    straight(2.5, 20);
+    straight(2, 20);
     turn(91, 30, -30);
-    straight_on(20);
+    straight_on(30);
     while (true){
     color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
     if(color_3 == COLOR_WHITE) break;
@@ -1703,7 +1704,8 @@ void start_2() {
         color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
         if(color_3 == COLOR_RED) break;
     }
-    
+    ev3_motor_stop(EV3_PORT_B, true);
+    ev3_motor_stop(EV3_PORT_C, true);
    
 }
 
@@ -1711,9 +1713,6 @@ void start_2() {
 
 
 void area_1(){
-
-
-
     straight(9, 20);
     arm_A(OPEN);
 
@@ -1771,7 +1770,7 @@ void area_1(){
 
 
     linetrace_rgb_pd_SP(BOTH, COLOR_YELLOW, 20, true);
-    straight(4.5, -20);
+    straight(4, -20);
     arm_A(OPEN);
     turn(40, 0, 30);
     turn(5, 0, -29);
@@ -1817,7 +1816,7 @@ void area_2(){
         if(color_3 == COLOR_RED) break;
     }
 
-
+   
     straight(9, 20);
 
 
@@ -1853,7 +1852,7 @@ void area_2(){
 
         turn(90, -30, 30);
         straight(10, 40);
-        straight_on(20);
+        straight_on(30);
         //白線見てから黒線で止まるストレート
         while (true){
             color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
@@ -1884,24 +1883,21 @@ void area_2(){
         straight(3, 20);
         turn(90, 30, -30);
         linetrace_cm_rgb_pd_SP(6, 20, false);
-        linetrace_rgb_pd_SP(LEFT, COLOR_BLACK, 20, false);
+        linetrace_color_pd_SP(LEFT, COLOR_BLACK, 20, false);
         straight(5, 30);
         turn(90, -30, 30);
         
     }
 
-    linetrace_cm_rgb_pd_SP(7, 20, true);
+    linetrace_cm_rgb_pd_SP(8, 20, true);
     arm_A(CLOSE);
     arm_D(THREE);
-    linetrace_cm_rgb_pd_SP(8.5, 20, true);
-
-stopping();
-
+    linetrace_cm_rgb_pd_SP(8, 20, true);
     tslp_tsk(100*MSEC);
 
 
    
-    turn(40, 0, 29);
+    turn(40, 0, 30);
     arm_D(TWO);
     arm_A(OPEN);
     arm_D(FOUR);    
@@ -2138,170 +2134,22 @@ void main_task(intptr_t unused) {
     ev3_motor_reset_counts(EV3_PORT_A);
     ev3_motor_reset_counts(EV3_PORT_D);
 
+
+
+    
     yellow = 4;
     start = 1;
 
-    area_1();
-    area_2();
+
     
-    
-
-    switch (start) {
-    case 1:
-        start_1();
-        break;
-    case 2:
-        start_2();
-        break;
-    
-    default:
-        break;
-    }
-
-
-
-   
    
 
 
     
 
-    if(start == 1){
-        turn(50, 30, -30);
-        straight(37, 30);
-        turn(150, 30, -30);
-        arm_A(OPEN);
-        arm_D(ALLUP);
-        straight_on(-50);
-        tslp_tsk(200*MSEC);
-        arm_D(UP);
-        straight_on(-20);
-        tslp_tsk(500*MSEC);
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-    
-        straight(2.6, 20);
-        turn(92, 30, -30);
-        tslp_tsk(100*MSEC);
-        straight_on(30);
-        straight_off(10, false);
-        while (true){
-            ev3_color_sensor_get_rgb_raw(EV3_PORT_3, &rgb_val);
-            red = rgb_val.r;
-            green = rgb_val.g;
-            blue = rgb_val.b;
-            if(green >= 100) break;
-        }
-        straight(17, 30);
-        tslp_tsk(100*MSEC);
 
 
-
-
-        arm_D(DOWN);
-        arm_A(CLOSE);
-        arm_D(UP);
-        straight(9.8, 30);
-        arm_A(OPEN);
-        arm_D(DOWN);
-        arm_A(CLOSE);
-        straight(12, -30);
-
-        turn(90, -30, 30);
-        straight_on(-40);
-        tslp_tsk(400*MSEC);
-        straight_on(-20);
-        tslp_tsk(200*MSEC);
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-        speed_arm(EV3_PORT_D, UP, 30);
-        straight(65, 60);
-        arm_D(THREE);
-        straight_on(50);    
-        //白線見てから黒線で止まるストレート
-        while (true){
-            color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
-            if(color_2 == COLOR_WHITE) break;
-        }
-        while (true){
-            now_reflect_2 = ev3_color_sensor_get_reflect(EV3_PORT_2);
-            if(now_reflect_2 <= 10) break;
-        }
-        straight(13, 50);
-        straight_on(50);
-        tslp_tsk(400*MSEC);
-        straight_on(20);
-        tslp_tsk(300*MSEC);
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-        straight(6 , -20);
-        tslp_tsk(100*MSEC);
-        turn(90, -30, 30);
-        straight(35, -40);
-        straight_on(-30);    
-        //白線見てから黒線で止まるストレート
-        while (true){
-            color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
-            if(color_2 == COLOR_RED) break;
-        }
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-        tslp_tsk(100*MSEC);
-        turn(90, -30, 30);
-
-        
-        straight_on(-40);
-        arm_D(DOWN);
-        straight_on(-20);
-        tslp_tsk(200*MSEC);
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-    }
-    if(start == 2){
-        turn(60, 30, -30);
-        arm_D(DOWN);
-        tslp_tsk(100*MSEC);
-        straight(20, 30);
-        turn(40, -30, 30);
-        arm_A(OPEN);
-        arm_D(ALLUP);
-        straight_on(-30);
-        while (true){
-            color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-            if(color_3 == COLOR_WHITE) break;
-        }
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-        straight(16, -30);
-        turn(90, -30, 30);
-        speed_arm(EV3_PORT_D, DOWN, 40);
-        linetrace_cm_rgb_pd_SP(5, 15, false);
-        linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, true);
-        arm_D(DOWN);
-        linetrace_cm_rgb_pd_SP(15, 20, true);
-        turn(90, 30, -30);
-        straight_on(-40);
-        tslp_tsk(1000*MSEC);
-        ev3_motor_stop(EV3_PORT_B, true);
-        ev3_motor_stop(EV3_PORT_C, true);
-        tslp_tsk(100*MSEC);
-        straight(2, 20);
-        tslp_tsk(100*MSEC);
-        turn(91, 30, -30);
-        arm_D(UP);
-        straight(14, 30);
-
-
-
-        arm_D(DOWN);
-        arm_A(CLOSE);
-        arm_D(UP);
-        straight(9.8, 30);
-        arm_A(OPEN);
-        arm_D(DOWN);
-        arm_A(CLOSE);
-        straight(75, -50);
-        straight_on(-20);
+    straight_on(-20);
         while (true){
             color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
             if(color_2 == COLOR_RED) break;
@@ -2316,146 +2164,8 @@ void main_task(intptr_t unused) {
         tslp_tsk(300*MSEC);
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
-    }
 
-    straight(32.5, 40);
-    tslp_tsk(100*MSEC);
-
-
-    turn(90, -30, 30);
-
-
-    tslp_tsk(100*MSEC);
-
-
-    straight(24, 40);
-
-
-    arm_D(UP);
-    turn(20, 40, -40);
-    turn(20, -40, 40);
-
-
-    tslp_tsk(100*MSEC);
-    straight(2.5, -20);
-
-
-    tslp_tsk(100*MSEC);
-
-
-    turn(90, -30, 30);
-    tslp_tsk(100*MSEC);
-    straight(8, 30);
-
-
-    arm_A(OPEN);
-    arm_D(DOWN);
-    arm_A(CLOSE);
-    arm_D(UP);
-    straight(9.8, 30);
-    arm_A(OPEN);
-    arm_D(DOWN);
-    arm_A(CLOSE);
-    arm_D(TWO);
     
-    gb_check(EV3_PORT_1);
-    straight(17.8, -40);
-    turn(90, 30, -30);
-    straight(7, 40);
-    arm_D(ALLUP);
-    straight(22, -40);
-    turn(135, 30, -30);
-    straight(35, 60);
-    straight_on(50);
-    while (true){
-        color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
-        if(color_2 == COLOR_WHITE) break;
-    }
-    straight_on(30);
-    while (true){
-        now_reflect_3 = ev3_color_sensor_get_reflect(EV3_PORT_3);
-        if(now_reflect_3 <= 10) break;
-    }
-    straight(3, 30);
-    turn(45, 30, -30);
-    linetrace_cm_rgb_pd_SP(12, 20, false);
-    linetrace_cm_rgb_pd_SP(8, 30, false);
-    
-
-
-    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, true);
-    arm_D(UP);
-    tslp_tsk(150*MSEC);
-    straight(12.5, -30);
-
-
-    switch (bg_color) {
-    case 2:
-        turn(90, 30, -30);
-        //linetrace_cm_rgb_pd_SP(17.5, 20, true);
-        break;
-    case 3:
-        turn(180, 30, -30);
-        linetrace_cm_rgb_pd_SP(20.6, 20, true);
-        tslp_tsk(100*MSEC);
-        turn(90, -30, 30);
-    default:
-        break;
-    }
-    straight(20, 30);
-    arm_D(DOWN);
-    arm_A(OPEN);
-    arm_D(ALLUP);
-    straight(10, -30);
-    speed_arm(EV3_PORT_D, DOWN, 20);
-    straight_on(-20);
-    while (true){
-        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-        if(color_3 == COLOR_WHITE) break;
-    }
-
-
-    ev3_motor_stop(EV3_PORT_B, true);
-    ev3_motor_stop(EV3_PORT_C, true);
-    arm_D(THREE);
-    turn(90, -30, 30);
-    if(bg_color == 2) linetrace_cm_rgb_pd_SP(5, 20, false);
-    if(bg_color == 3) {
-        linetrace_cm_rgb_pd_SP(7, 20, false);
-        linetrace_cm_rgb_pd_SP(13, 40, false);
-    }
-    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, true);
-    arm_D(ALLUP);
-    linetrace_rgb_pd_SP(BOTH, COLOR_RED, 20, true);
-    straight(20, 40);
-    straight_on(30);
-    while (true){
-        color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
-        if(color_2 == COLOR_RED) break;
-    }
-    ev3_motor_stop(EV3_PORT_B, true);
-    ev3_motor_stop(EV3_PORT_C, true);
-    turn(30, -30, 30);
-    speed_arm(EV3_PORT_D, DOWN, 60);
-    tslp_tsk(300*MSEC);
-    straight(31, 40);
-    arm_D(UP);
-    straight(16, -40);
-    turn(120, 30, -30);
-    straight(8, -30);
-    straight_on(-30);
-    arm_D(DOWN);
-    tslp_tsk(300*MSEC);
-    straight_on(-20);
-    tslp_tsk(300*MSEC);
-    ev3_motor_stop(EV3_PORT_B, true);
-    ev3_motor_stop(EV3_PORT_C, true);
-    straight(24, 40);
-    turn(90, -30, 30);
-    straight(24, 50);
-    arm_D(UP);
-    turn(30, 30, 0);
-
 
 
 
