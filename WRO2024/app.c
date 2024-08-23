@@ -2152,7 +2152,8 @@ void main_task(intptr_t unused) {
     ev3_motor_reset_counts(EV3_PORT_C);
 
     yellow = 4;
-    start = 2;
+    start = 1;
+
 
     
     
@@ -2303,7 +2304,7 @@ void main_task(intptr_t unused) {
         tslp_tsk(100*MSEC);
         straight(2.5, 20);
         tslp_tsk(100*MSEC);
-        turn(92, 30, -30);
+        turn(91, 30, -30);
         straight(14.2, 30);
 
 
@@ -2439,10 +2440,9 @@ void main_task(intptr_t unused) {
         linetrace_cm_rgb_pd_SP(7, 20, false);
         linetrace_cm_rgb_pd_SP(13, 40, false);
     }
-    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, false);
-    speed_arm(EV3_PORT_D, UP, 50);
-    linetrace_rgb_pd_SP(BOTH, COLOR_RED, 20, true);
+    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, true);
     arm_D(ALLUP);
+    linetrace_rgb_pd_SP(BOTH, COLOR_RED, 20, true);
     straight(20, 40);
     straight_on(30);
     while (true){

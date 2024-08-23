@@ -1529,11 +1529,12 @@ void start_1(){
     speed_arm(EV3_PORT_D, UP, 20);
     straight(20, 50);
     arm_D(ALLUP);
-    straight_on(20);
+    straight_on(30);
     while (true){
         color_3 = ev3_color_sensor_get_color(EV3_PORT_2);
         if(color_3 == COLOR_WHITE) break;
     }
+    straight_on(20);
     while (true){
         color_3 = ev3_color_sensor_get_color(EV3_PORT_2);
         if(color_3 == COLOR_BLACK) break;
@@ -1552,6 +1553,7 @@ void start_1(){
     linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 20, true);
     tslp_tsk(100*MSEC);
     straight(2.5, -20);
+    tslp_tsk(100*MSEC);
     turn(90, 30, -30);
 
 
@@ -1631,8 +1633,8 @@ void start_1(){
 void start_2() {
     straight_on(20);
     while (true){
-    color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-    if(color_3 == COLOR_WHITE) break;
+        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
+        if(color_3 == COLOR_WHITE) break;
     }
     while (true){
         color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
@@ -1641,7 +1643,7 @@ void start_2() {
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
     tslp_tsk(100*MSEC);
-    turn(92, 30, -30);
+    turn(93, 30, -30);
     straight(10, 30);
 
 
@@ -1809,13 +1811,14 @@ void area_2(){
     speed_arm(EV3_PORT_D, UP, 30);
     straight_on(-40);
     tslp_tsk(500*MSEC);
-    straight_on(-20);
-    tslp_tsk(200*MSEC);
+    straight_on(-30);
+    tslp_tsk(150*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
     arm_D(UP);
-    straight(2.5, 20);
-    turn(91, 30, -30);
+    tslp_tsk(100*MSEC);
+    straight(2.3, 20);
+    turn(92, 30, -30);
     straight_on(20);
     while (true){
         color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
@@ -2145,43 +2148,35 @@ void main_task(intptr_t unused) {
 
     ev3_motor_reset_counts(EV3_PORT_A);
     ev3_motor_reset_counts(EV3_PORT_D);
+    ev3_motor_reset_counts(EV3_PORT_B);
+    ev3_motor_reset_counts(EV3_PORT_C);
 
     yellow = 4;
     start = 1;
 
+
     
-    straight_on(20);
-        //白線見てから黒線で止まるストレート
-        while (true){
-            color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-            if(color_3 == COLOR_WHITE) break;
-        }
-        while (true){
-            now_reflect_3 = ev3_color_sensor_get_reflect(EV3_PORT_3);
-            if(now_reflect_3 <= 10) break;
-        }
-    straight_off(4, true);    
-    linetrace_cm_rgb_pd_SP(7, 20, true);
-    arm_A(CLOSE);
-    arm_D(THREE);
-    linetrace_cm_rgb_pd_SP(8.5, 20, true);
+    
+    
+
+    switch (start) {
+    case 1:
+        start_1();
+        break;
+    case 2:
+        start_2();
+        break;
+    
+    default:
+        break;
+    }
 
 
-    tslp_tsk(100*MSEC);
+    area_1();
+    area_2();
 
 
    
-    turn(40, 0, 29);
-    arm_D(TWO);
-    arm_A(OPEN);
-    arm_D(FOUR);    
-    arm_A(CLOSE);
-    arm_D(ALLUP);
-    straight(15, -30);
-    /*speed_arm(EV3_PORT_D, DOWN, 60);
-    tslp_tsk(300*MSEC);*/
-    arm_D(DOWN);
-
    
 
 
@@ -2190,8 +2185,8 @@ void main_task(intptr_t unused) {
     if(start == 1){
         turn(50, 30, -30);
         straight(37, 30);
+        tslp_tsk(100*MSEC);
         turn(150, 30, -30);
-        stopping();
         arm_A(OPEN);
         arm_D(ALLUP);
         straight_on(-50);
@@ -2212,7 +2207,7 @@ void main_task(intptr_t unused) {
             red = rgb_val.r;
             green = rgb_val.g;
             blue = rgb_val.b;
-            if(green >= 100) break;
+            if(green >= 85) break;
         }
         straight(17, 30);
         tslp_tsk(100*MSEC);
@@ -2227,7 +2222,6 @@ void main_task(intptr_t unused) {
         arm_A(OPEN);
         arm_D(DOWN);
         arm_A(CLOSE);
-        straight(12, -30);
 
         turn(90, -30, 30);
         straight_on(-40);
@@ -2236,7 +2230,7 @@ void main_task(intptr_t unused) {
         tslp_tsk(200*MSEC);
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
-        speed_arm(EV3_PORT_D, UP, 30);
+        speed_arm(EV3_PORT_D, UP, 36);
         straight(65, 60);
         arm_D(THREE);
         straight_on(50);    
@@ -2249,7 +2243,7 @@ void main_task(intptr_t unused) {
             now_reflect_2 = ev3_color_sensor_get_reflect(EV3_PORT_2);
             if(now_reflect_2 <= 10) break;
         }
-        straight(13, 50);
+        straight_off(13, false);
         straight_on(50);
         tslp_tsk(400*MSEC);
         straight_on(20);
@@ -2282,6 +2276,7 @@ void main_task(intptr_t unused) {
     if(start == 2){
         turn(60, 30, -30);
         arm_D(DOWN);
+        tslp_tsk(100*MSEC);
         straight(20, 30);
         turn(40, -30, 30);
         arm_A(OPEN);
@@ -2302,15 +2297,15 @@ void main_task(intptr_t unused) {
         linetrace_cm_rgb_pd_SP(15, 20, true);
         turn(90, 30, -30);
         straight_on(-40);
-        tslp_tsk(1000*MSEC);
+        tslp_tsk(400*MSEC);
+        arm_D(UP);
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
         tslp_tsk(100*MSEC);
-        straight(2, 20);
+        straight(2.5, 20);
         tslp_tsk(100*MSEC);
         turn(91, 30, -30);
-        arm_D(UP);
-        straight(14, 30);
+        straight(14.2, 30);
 
 
 
@@ -2327,7 +2322,7 @@ void main_task(intptr_t unused) {
             color_2 = ev3_color_sensor_get_color(EV3_PORT_2);
             if(color_2 == COLOR_RED) break;
         }
-        straight_off(0.8, true);
+        straight_off(1.2, true);
         ev3_motor_stop(EV3_PORT_B, true);
         ev3_motor_stop(EV3_PORT_C, true);
         turn(90, -30 ,30);
@@ -2339,7 +2334,7 @@ void main_task(intptr_t unused) {
         ev3_motor_stop(EV3_PORT_C, true);
     }
 
-    straight(32.5, 40);
+    straight(32, 40);
     tslp_tsk(100*MSEC);
 
 
@@ -2377,14 +2372,14 @@ void main_task(intptr_t unused) {
     arm_A(OPEN);
     arm_D(DOWN);
     arm_A(CLOSE);
-    speed_arm(EV3_PORT_D, UP, 30);
+    speed_arm(EV3_PORT_D, UP, 48);
     straight(17.8, -40);
     turn(90, 30, -30);
     straight(7, 40);
     arm_D(ALLUP);
     gb_check(EV3_PORT_1);
     straight(22, -50);
-    turn(135, 30, -30);
+    turn(132, 30, -30);
     straight(40, 60);
     straight_on(50);
     while (true){
@@ -2397,7 +2392,7 @@ void main_task(intptr_t unused) {
         if(now_reflect_3 <= 10) break;
     }
     straight(3, 30);
-    turn(45, 30, -30);
+    turn(48, 30, -30);
     linetrace_cm_rgb_pd_SP(12, 20, false);
     linetrace_cm_rgb_pd_SP(8, 30, false);
     
@@ -2422,6 +2417,7 @@ void main_task(intptr_t unused) {
     default:
         break;
     }
+    speed_arm(EV3_PORT_D, DOWN, 20);
     straight(20, 30);
     arm_D(DOWN);
     arm_A(OPEN);
@@ -2464,11 +2460,11 @@ void main_task(intptr_t unused) {
     turn(120, 30, -30);
     straight_on(-40);
     arm_D(DOWN);
-    straight_on(-20);
-    tslp_tsk(300*MSEC);
+    straight_on(-30);
+    tslp_tsk(500*MSEC);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    straight(24, 50);
+    straight(24, 40);
     turn(90, -30, 30);
     straight(25.5, 40);
     arm_D(UP);
