@@ -29,15 +29,16 @@ tslp_tsk(500*MSEC);
 arm_D(UP);
 
 
-オブジェクト二つ目以降を取る動き
-arm_D(UP);
+オブジェクト二つ目以降を取る動
 straight(10, 30);
 arm_A(GET_OBJ_2);
 arm_D(DOWN);
 straight_on(10);
-straight_off(0.2, false);
+straight_off(0.8, false);
 arm_A(CLOSE);
 straight_off(1, true);
+straight(11.7, -30);
+arm_D(UP);
 
 
 
