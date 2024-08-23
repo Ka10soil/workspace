@@ -114,7 +114,7 @@ void rg_check(port_t port, int num){
 }
 
 void turn(int angle, int lb_power, int rc_power){
-    tslp_tsk(200*MSEC);
+    tslp_tsk(100*MSEC);
     if(angle > 100) tslp_tsk(200*MSEC);
     if (lb_power == 30) lb_power = lb_power + 35;
     if (lb_power == -30) lb_power = lb_power - 35;
@@ -138,7 +138,7 @@ void turn(int angle, int lb_power, int rc_power){
         turn_num = 0.154;
     }
     if (lb_power < 0 && rc_power > 0) {
-        turn_num = 0.157;
+        turn_num = 0.154;
     }
     if (abs(lb_power) >= abs(rc_power)) maximum = abs(lb_power);
     if (abs(rc_power) > abs(lb_power)) maximum = abs(rc_power);
@@ -170,7 +170,6 @@ void turn(int angle, int lb_power, int rc_power){
             if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > average) changing_power = changing_power + 0.004;
             if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.03;
             if (changing_power <= 20) changing_power = 20;
-            changing_power = 20;
             if (changing_power >= maximum) changing_power = maximum;
             if (goal_angle <= average) break; 
             rc_power = changing_power*rc_sign;
@@ -181,8 +180,6 @@ void turn(int angle, int lb_power, int rc_power){
     }
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    tslp_tsk(100*MSEC);
-    
 }
 
 void arm_A(armmode_new_t mode){
@@ -192,14 +189,14 @@ void arm_A(armmode_new_t mode){
             ev3_motor_set_power(EV3_PORT_A, 20);
             break;
         case CLOSE:
-            ev3_motor_set_power(EV3_PORT_A, -80);
+            ev3_motor_set_power(EV3_PORT_A, -60);
             break;
         case SET:
-            if(now_arm_angle_A >= -250)ev3_motor_set_power(EV3_PORT_A, -20);
+            if(now_arm_angle_A >= -210)ev3_motor_set_power(EV3_PORT_A, -20);
             else ev3_motor_set_power(EV3_PORT_A, 15);
             break;
         case GET_OBJ_2:
-            if(now_arm_angle_A >= -280)ev3_motor_set_power(EV3_PORT_A, -20);
+            if(now_arm_angle_A >= -250)ev3_motor_set_power(EV3_PORT_A, -20);
             else ev3_motor_set_power(EV3_PORT_A, 15);
             break;
         case GETDEBRIS:
@@ -215,8 +212,8 @@ void arm_A(armmode_new_t mode){
     }
     while (true) {
         now_arm_angle_A = ev3_motor_get_counts(EV3_PORT_A);
-        if(now_arm_angle_A <= -249 && now_arm_angle_A >= -251 && mode == SET) break;
-        if(now_arm_angle_A <= -279 && now_arm_angle_A >= -281 && mode == GET_OBJ_2) break;
+        if(now_arm_angle_A <= -209 && now_arm_angle_A >= -211 && mode == SET) break;
+        if(now_arm_angle_A <= -249 && now_arm_angle_A >= -251 && mode == GET_OBJ_2) break;
         if(now_arm_angle_A <= -79 && now_arm_angle_A >= -81 && mode == GETDEBRIS) break;
         if(mode == CLOSE) break;
         if(mode == OPEN) break;
@@ -443,20 +440,20 @@ void gain_set_rgb(int power, float *p_gain, float *d_gain){
         *d_gain = 80;   
     }
     if(power > 10 && power <= 20){
-        *p_gain = 0.16;   
-        *d_gain = 70;   
+        *p_gain = 0.12;   
+        *d_gain = 100;   
     }
     if(power == 24){
         *p_gain = -0.5;   //power24だけrightのセンサーでライントレース
         *d_gain = 60;   
     }
     if(power > 20 && power <= 30 && power != 24){
-        *p_gain = 0.1;   
-        *d_gain = 80; 
+        *p_gain = 0.07;   
+        *d_gain = 80;   
     }
     if(power > 30 && power <= 40){
-        *p_gain = 0.06;   
-        *d_gain = 70;   
+        *p_gain = 0.04;   
+        *d_gain = 90;   
     }
     if(power > 40 && power <= 50){
         *p_gain = 0.04;   
@@ -1237,107 +1234,38 @@ void main_task(intptr_t unused) {
 
     ev3_motor_stop(EV3_PORT_A,true);
     ev3_motor_stop(EV3_PORT_D, true);
-
-
-
-
-
-
-
-
-
-
-
     arm_A(SET);
-    straight_on(20);
+    arm_D(ONE);
+
+
+    straight_on(30);
     while (true){
-        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-        if(color_3 == COLOR_WHITE) break;
+    color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
+    if(color_3 == COLOR_WHITE) break;
     }
     while (true){
         color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
         if(color_3 == COLOR_RED) break;
     }
+    straight(20, 30);
+    turn(90, 30, -30);
+    straight_on(-30);
+    tslp_tsk(600*MSEC);
+    ev3_motor_stop(EV3_PORT_B,true);
+    ev3_motor_stop(EV3_PORT_C, true);
+    straight(30, 30);
+    turn(90, -30, 30);
+    straight(23.5, 20);
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
-    tslp_tsk(200*MSEC);
-    turn(90, 30, -30);
-    straight(5,20);
-    straight_on(20);
-    while (true){
-        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-        if(color_3 == COLOR_WHITE) break;
-    }
-    while (true){
-        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
-        if(color_3 == COLOR_RED) break;
-    }
-    linetrace_cm_rgb_pd_SP(17, 20, true);
-    turn(90, 30, -30);
-   
-
-
-    arm_D(UP);
-    straight(10, 30);
-    arm_A(SET);
-    arm_D(DOWN);
     arm_A(CLOSE);
-    tslp_tsk(500*MSEC);
-    straight(10, -30);
-    turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(9.8, 20, true);
-    turn(90, 30, -30);
-   
-    arm_D(UP);
-    straight(10, 30);
-    arm_A(GET_OBJ_2);
-    arm_D(DOWN);
-    straight_on(10);
-    straight_off(0.2, false);
-    arm_A(CLOSE);
-    straight_off(1, true);
-    straight(11.7, -30);
-    turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(9.8, 20, true);
-    turn(90, 30, -30);
+    tslp_tsk(700*MSEC);
+    straight(15, -40);
+    turn(160, -30, 30);
+    straight(30, 50);
 
 
 
-
-    arm_D(UP);
-    straight(10, 30);
-    arm_A(GET_OBJ_2);
-    arm_D(DOWN);
-    straight_on(10);
-    straight_off(0.2, false);
-    arm_A(CLOSE);
-    straight_off(1, true);
-    straight(11.7, -30);
-    turn(90, -30, 30);
-    linetrace_cm_rgb_pd_SP(6.8, 20, true);
-    straight(3, 20);
-    turn(90, 30, -30);
-
-
-    arm_D(UP);
-    straight(10, 30);
-    arm_A(GET_OBJ_2);
-    arm_D(DOWN);
-    straight_on(10);
-    straight_off(0.2, false);
-    arm_A(CLOSE);
-    straight_off(1, true);
-    straight(11.7, -30);
-    turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(10, 20, true);
-    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, true);
-    straight(4.5, 30);
-    turn(90, 30, -30);
-    linetrace_cm_rgb_pd_SP(18, 20, true);
-
-
-    arm_A(SET);
-    arm_D(ALLUP);
 
 
 

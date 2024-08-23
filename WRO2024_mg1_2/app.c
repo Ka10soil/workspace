@@ -34,9 +34,10 @@ arm_D(UP);
 straight(10, 30);
 arm_A(GET_OBJ_2);
 arm_D(DOWN);
+straight_on(10);
+straight_off(0.2, false);
 arm_A(CLOSE);
-tslp_tsk(500*MSEC);
-arm_D(UP);
+straight_off(1, true);
 
 
 
@@ -71,10 +72,10 @@ void turn(int angle, int lb_power, int rc_power){
         turn_num = 0.152;
     }
     if (lb_power > 0 && rc_power < 0) {
-        turn_num = 0.156;
+        turn_num = 0.154;
     }
     if (lb_power < 0 && rc_power > 0) {
-        turn_num = 0.156;
+        turn_num = 0.154;
     }
     if (abs(lb_power) >= abs(rc_power)) maximum = abs(lb_power);
     if (abs(rc_power) > abs(lb_power)) maximum = abs(rc_power);
@@ -104,8 +105,8 @@ void turn(int angle, int lb_power, int rc_power){
         }
         if (lb_power != 0 && rc_power != 0){
             if (changing_power < maximum && goal_angle - (points*turn_num*ROBOT1CM) > average) changing_power = changing_power + 0.004;
-            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.14;
-            if (changing_power <= 15) changing_power = 15;
+            if (goal_angle - (points*turn_num*ROBOT1CM) <= now_right_angle) changing_power = changing_power - 0.03;
+            if (changing_power <= 20) changing_power = 20;
             if (changing_power >= maximum) changing_power = maximum;
             if (goal_angle <= average) break; 
             rc_power = changing_power*rc_sign;
