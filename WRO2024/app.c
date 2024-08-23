@@ -2138,7 +2138,7 @@ void main_task(intptr_t unused) {
 
     
     yellow = 4;
-    start = 2;
+    start = 1;
 
     switch (start) {
     case 1:
@@ -2423,7 +2423,7 @@ void main_task(intptr_t unused) {
     arm_D(UP);
     straight(16, -40);
     speed_arm(EV3_PORT_D, DOWN, 40);
-    turn(37, 30, -30);
+    turn(35, 30, -30);
     arm_D(DOWN);
     straight(23, 50);
     arm_D(UP);
