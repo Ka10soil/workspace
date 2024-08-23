@@ -471,7 +471,7 @@ void arm_D(armmode_new_t mode) {
         if(now_arm_angle <= 481 && now_arm_angle >= 479 && mode == TWO) break;
         if(now_arm_angle <= 696 && now_arm_angle >= 694 && mode == THREE) break;
         if(now_arm_angle <= 906 && now_arm_angle >= 904 && mode == FOUR) break;
-        if(now_arm_angle >= 940 && mode == ALLUP) break;
+        if(now_arm_angle >= 980 && mode == ALLUP) break;
     }
     /*if(mode == SETNEW) {
         ev3_motor_stop(EV3_PORT_D, true);
@@ -1631,7 +1631,7 @@ void start_2() {
     ev3_motor_stop(EV3_PORT_B, true);
     ev3_motor_stop(EV3_PORT_C, true);
     tslp_tsk(100*MSEC);
-    turn(95, 30, -30);
+    turn(93, 30, -30);
     straight(10, 30);
 
 
@@ -1645,9 +1645,8 @@ void start_2() {
 
 
 
-    speed_arm(EV3_PORT_D, UP, 28);
-    linetrace_cm_rgb_pd_SP(18, 20, true);
-    arm_D(THREE);
+    linetrace_cm_rgb_pd_SP(18, 20, false);
+    speed_arm(EV3_PORT_D, UP, 16);
     linetrace_cm_rgb_pd_SP(52, 40, false);
 
 
@@ -1658,14 +1657,14 @@ void start_2() {
 
 
     linetrace_rgb_pd_SP(BOTH, COLOR_BLACK, 20, true);
-    tslp_tsk(100*MSEC);
+    arm_D(THREE);
     straight(3, -20);
     tslp_tsk(100*MSEC);
     turn(90, 30, -30);
 
 
 
-    straight(8, 30);
+    straight(8.5, 30);
     arm_D(ALLUP);
     straight(15, -40);
     turn(200, 30, -30);
@@ -1712,8 +1711,9 @@ void start_2() {
 
 
 
+
 void area_1(){
-    straight(8.5, 20);
+    straight(9, 20);
     arm_A(OPEN);
 
 
@@ -1746,7 +1746,7 @@ void area_1(){
    
 
 
-    straight(13.2, -30);
+    straight(13.7, -30);
     turn(90, -30, 30);
     straight(10, 40);
     straight_on(30);
@@ -1770,7 +1770,7 @@ void area_1(){
 
 
     linetrace_rgb_pd_SP(BOTH, COLOR_YELLOW, 20, true);
-    straight(4.5, -20);
+    straight(4, -20);
     arm_A(OPEN);
     turn(40, 0, 30);
     turn(5, 0, -29);
@@ -1817,7 +1817,7 @@ void area_2(){
     }
 
    
-    straight(8.5, 20);
+    straight(9, 20);
 
 
 
@@ -1848,7 +1848,7 @@ void area_2(){
     arm_A(CLOSE);
 
     if(start == 1) {
-        straight(7.5, 30);
+        straight(7, 30);
 
         turn(90, -30, 30);
         straight(10, 40);
@@ -1866,7 +1866,7 @@ void area_2(){
 
     }
     if(start == 2) {
-        straight(12, -40);
+        straight(12.5, -40);
         turn(90, -30, 30);
         arm_D(DOWN);
         straight_on(50);
@@ -1897,7 +1897,7 @@ void area_2(){
 
 
    
-    turn(40, 0, 29);
+    turn(40, 0, 30);
     arm_D(TWO);
     arm_A(OPEN);
     arm_D(FOUR);    
@@ -2376,7 +2376,7 @@ void main_task(intptr_t unused) {
     linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, true);
     arm_D(UP);
     tslp_tsk(150*MSEC);
-    straight(14.5, -30);
+    straight(12.5, -30);
 
     switch (bg_color) {
     case 2:
@@ -2385,7 +2385,7 @@ void main_task(intptr_t unused) {
         break;
     case 3:
         turn(180, 30, -30);
-        linetrace_cm_rgb_pd_SP(20, 20, true);
+        linetrace_cm_rgb_pd_SP(22, 20, true);
         tslp_tsk(100*MSEC);
         turn(90, -30, 30);
     default:

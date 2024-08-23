@@ -1238,7 +1238,121 @@ void main_task(intptr_t unused) {
     ev3_motor_stop(EV3_PORT_A,true);
     ev3_motor_stop(EV3_PORT_D, true);
 
+
     
+
+
+
+
+
+
+
+
+
+
+
+    arm_A(SET);
+    straight_on(20);
+    while (true){
+        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
+        if(color_3 == COLOR_WHITE) break;
+    }
+    while (true){
+        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
+        if(color_3 == COLOR_RED) break;
+    }
+    ev3_motor_stop(EV3_PORT_B, true);
+    ev3_motor_stop(EV3_PORT_C, true);
+    tslp_tsk(200*MSEC);
+    turn(90, 30, -30);
+    straight(5,20);
+    straight_on(20);
+    while (true){
+        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
+        if(color_3 == COLOR_WHITE) break;
+    }
+    while (true){
+        color_3 = ev3_color_sensor_get_color(EV3_PORT_3);
+        if(color_3 == COLOR_RED) break;
+    }
+    linetrace_cm_rgb_pd_SP(16, 20, true);
+    turn(90, 30, -30);
+
+   
+
+
+    arm_D(UP);
+    straight(10, 20);
+    arm_A(SET);
+    arm_D(DOWN);
+    straight_on(10);
+    straight_off(0.6, false);
+    arm_A(CLOSE);
+    straight_off(1, true);
+    arm_D(UP);
+    straight(12.1, -30);
+    turn(90, -30, 30);
+    linetrace_cm_rgb_pd_SP(9.5, 20, true);
+    turn(90, 30, -30);
+   
+    straight(10, 20);
+    arm_A(GET_OBJ_2);
+    arm_D(DOWN);
+    straight_on(10);
+    straight_off(0.6, false);
+    arm_A(CLOSE);
+    straight_off(1, true);
+    arm_D(UP);
+    straight(12.1, -30);
+    turn(90, -30, 30);
+    linetrace_cm_rgb_pd_SP(9.5, 20, true);
+    turn(90, 30, -30);
+
+
+
+
+    
+    straight(10, 20);
+    arm_A(GET_OBJ_2);
+    arm_D(DOWN);
+    straight_on(10);
+    straight_off(0.6, false);
+    arm_A(CLOSE);
+    straight_off(1, true);
+    arm_D(UP);
+    straight(12.1, -30);
+    turn(90, -30, 30);
+    straight(9.5, 20);
+    turn(90, 30, -30);
+
+
+
+    straight(10, 20);
+    arm_A(GET_OBJ_2);
+    arm_D(DOWN);
+    straight_on(10);
+    straight_off(0.6, false);
+    arm_A(CLOSE);
+    straight_off(1, true);
+    straight(12.1, -30);
+    turn(90, 30, -30);
+    linetrace_cm_rgb_pd_SP(10, 20, true);
+    linetrace_rgb_pd_SP(RIGHT, COLOR_BLACK, 20, true);
+    straight(4.5, 30);
+    turn(90, 30, -30);
+    linetrace_cm_rgb_pd_SP(18, 20, true);
+
+
+    arm_A(SET);
+    arm_D(ALLUP);
+
+
+
+
+
+
+
+
 
 
 
