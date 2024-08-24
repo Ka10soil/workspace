@@ -2154,6 +2154,13 @@ void main_task(intptr_t unused) {
     yellow = 4;
     start = 1;
 
+    while (true)
+    {
+        turn(90, 30, -30);
+        stopping();
+    }
+    
+
 
     
     

@@ -8,6 +8,27 @@
  * http://thetechnicgear.com/2014/03/howto-create-line-following-robot-using-mindstorms/
  */
 
+/* エクストラチャレンジ用のロボット
+赤
+r70 g:15 b:17
+青
+r10 g:23 b:63
+緑
+r10 g:42 b:20
+黄
+r90 g:54 b:22
+黒
+r9 g:12 b:15
+白
+r104 g:97 b:122
+*/
+
+/* 1stday用のロボット
+    red    green    blue    yellow    black    white
+r  26~44    0,1     0~2     34~54      0,1      39~62                       
+g  2,3      14~24   10~15   25~36      1,2      48~70                               
+b  1~8      3~8     20~33    8,9       3~6      33~55                        
+*/
 #include "ev3api.h"
 #include "app.h"
 #include "stdlib.h"
